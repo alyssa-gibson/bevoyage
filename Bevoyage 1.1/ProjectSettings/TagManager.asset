@@ -41,3 +41,24 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 1772772997
+    locked: 0
+  - name: Water
+    uniqueID: 2549725831
+    locked: 0
+  - name: UnderTree
+    uniqueID: 166466037
+    locked: 0
+  - name: AboveTree
+    uniqueID: 4251207035
+    locked: 0
+  - name: BuildingBase
+    uniqueID: 3431157705
+    locked: 0
+  - name: BuildingDetails
+    uniqueID: 1502249235
+    locked: 0
+  - name: Player
+    uniqueID: 2605841517
+    locked: 0
