@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CharMenu : MonoBehaviour
 {
+    public GameObject charaMenu;
     // Start is called before the first frame update
     void Start()
     {
@@ -11,25 +12,31 @@ public class CharMenu : MonoBehaviour
         //  calls char select once
     }
 
-    private void OpenCharMenu()
+    public void OpenCharMenu()
     {
         // On button press (c)
         //  Display the character menu and allow interactions
+        if (charaMenu.activeSelf == false) {
+            charaMenu.SetActive(true);  
+        }
     }
 
-    private void CloseCharMenu()
+    public void CloseCharMenu()
     {
         // On click of Exit button (hope for toggle)
         //  Hide the canvas from the player and make interation locked
+        if (charaMenu.activeSelf == true) {
+            charaMenu.SetActive(false);  
+        }
     }
 
-    private void CharSelect()
+    public void CharSelect()
     {
         // On click of Character Portrait
         //  Show the character in the middle panel and show stats and equipment on the right panel
     }
 
-    private void ItemSelect()
+    public void ItemSelect()
     {
         // On click of an item equipment on the right
         //  Inventory of just that equipment type will pop up
