@@ -10,7 +10,7 @@ public class MainMenuController : MonoBehaviour
     public GameObject gameMenu;
     
     public void playGame() {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("OverworldMap");
     }
 
     public void gameSaves() {
