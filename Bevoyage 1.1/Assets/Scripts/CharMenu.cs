@@ -10,25 +10,38 @@ public class CharMenu : MonoBehaviour
     {
         // Display the first member of the party (slot 1)
         //  calls char select once
+        // Menu should be inactive before input.
+        charaMenu.SetActive(false);
     }
 
-    public void OpenCharMenu()
-    {
-        // On button press (c)
-        //  Display the character menu and allow interactions
-        if (charaMenu.activeSelf == false) {
-            charaMenu.SetActive(true);  
-        }
+    public void Update() {
+    	if (Input.GetKey(KeyCode.C)) {
+    		Debug.Log("Character Menu Toggled");
+    		if (charaMenu.activeSelf == false) {
+            	charaMenu.SetActive(true);  
+			} else {
+    			charaMenu.SetActive(false);
+    		}
+    	}
     }
 
-    public void CloseCharMenu()
-    {
-        // On click of Exit button (hope for toggle)
-        //  Hide the canvas from the player and make interation locked
-        if (charaMenu.activeSelf == true) {
-            charaMenu.SetActive(false);  
-        }
-    }
+    // public void OpenCharMenu()
+    // {
+    //     // On button press (c)
+    //     //  Display the character menu and allow interactions
+    //     if (charaMenu.activeSelf == false) {
+    //         charaMenu.SetActive(true);  
+    //     }
+    // }
+
+    // public void CloseCharMenu()
+    // {
+    //     // On click of Exit button (hope for toggle)
+    //     //  Hide the canvas from the player and make interation locked
+    //     if (charaMenu.activeSelf == true) {
+    //         charaMenu.SetActive(false);  
+    //     }
+    // }
 
     public void CharSelect()
     {

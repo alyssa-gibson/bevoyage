@@ -9,23 +9,34 @@ public class Inventory : MonoBehaviour
     // Start is called before the first frame update
     void Start(){
         //gameObject.GetComponent<Button>().onClick.AddListener();
+        inventory.SetActive(false); 
     }
 
-    void OpenInventory(){
-        // On button press (tab)
-        //  Display the inventory menu and allow interactions
-        if (inventory.activeSelf == false) {
-            inventory.SetActive(true);  
+    void Update() {
+        if (Input.GetKeyDown("tab")) {
+            if (inventory.activeSelf == false) {
+                inventory.SetActive(true);
+            } else {
+                inventory.SetActive(false); 
+            }
         }
     }
 
-    void CloseInventory(){
-        // On click of Exit button
-        //  Hide the canvas from the player and make interation locked
-        if (inventory.activeSelf == true) {
-            inventory.SetActive(false);  
-        }
-    }
+    // void OpenInventory(){
+    //     // On button press (tab)
+    //     //  Display the inventory menu and allow interactions
+    //     if (inventory.activeSelf == false) {
+    //         inventory.SetActive(true);  
+    //     }
+    // }
+
+    // void CloseInventory(){
+    //     // On click of Exit button
+    //     //  Hide the canvas from the player and make interation locked
+    //     if (inventory.activeSelf == true) {
+    //         inventory.SetActive(false);  
+    //     }
+    // }
 
     void ItemBoxSelect(){
         // On click of item box
