@@ -15,7 +15,7 @@ public class CharMenu : MonoBehaviour
     }
 
     public void Update() {
-    	if (Input.GetKey(KeyCode.C)) {
+    	if (Input.GetKeyDown(KeyCode.C)) {
     		Debug.Log("Character Menu Toggled");
     		if (charaMenu.activeSelf == false) {
             	charaMenu.SetActive(true);  
@@ -25,23 +25,25 @@ public class CharMenu : MonoBehaviour
     	}
     }
 
-    // public void OpenCharMenu()
-    // {
-    //     // On button press (c)
-    //     //  Display the character menu and allow interactions
-    //     if (charaMenu.activeSelf == false) {
-    //         charaMenu.SetActive(true);  
-    //     }
-    // }
+    //Original methods that allow for toggling menu on click.
 
-    // public void CloseCharMenu()
-    // {
-    //     // On click of Exit button (hope for toggle)
-    //     //  Hide the canvas from the player and make interation locked
-    //     if (charaMenu.activeSelf == true) {
-    //         charaMenu.SetActive(false);  
-    //     }
-    // }
+    public void OpenCharMenu()
+    {
+        // On button press (c)
+        //  Display the character menu and allow interactions
+        if (charaMenu.activeSelf == false) {
+            charaMenu.SetActive(true);  
+        }
+    }
+
+    public void CloseCharMenu()
+    {
+        // On click of Exit button (hope for toggle)
+        //  Hide the canvas from the player and make interation locked
+        if (charaMenu.activeSelf == true) {
+            charaMenu.SetActive(false);  
+        }
+    }
 
     public void CharSelect()
     {

@@ -22,21 +22,23 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    // void OpenInventory(){
-    //     // On button press (tab)
-    //     //  Display the inventory menu and allow interactions
-    //     if (inventory.activeSelf == false) {
-    //         inventory.SetActive(true);  
-    //     }
-    // }
+    //Original Toggle Methods
+    
+    void OpenInventory(){
+        // On button press (tab)
+        //  Display the inventory menu and allow interactions
+        if (inventory.activeSelf == false) {
+            inventory.SetActive(true);  
+        }
+    }
 
-    // void CloseInventory(){
-    //     // On click of Exit button
-    //     //  Hide the canvas from the player and make interation locked
-    //     if (inventory.activeSelf == true) {
-    //         inventory.SetActive(false);  
-    //     }
-    // }
+    void CloseInventory(){
+        // On click of Exit button
+        //  Hide the canvas from the player and make interation locked
+        if (inventory.activeSelf == true) {
+            inventory.SetActive(false);  
+        }
+    }
 
     void ItemBoxSelect(){
         // On click of item box
