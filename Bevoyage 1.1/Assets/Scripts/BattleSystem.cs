@@ -12,13 +12,23 @@ public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
 
 public class BattleSystem : MonoBehaviour
 {
-	public GameObject playerPrefab;
+
+	public GameObject playerPrefab1;
+    public GameObject playerPrefab2;
+    public GameObject playerPrefab3;
+    public GameObject playerPrefab4;
 	public GameObject enemyPrefab;
 
-	public Transform playerStation;
+	public Transform playerStation1;
+    public Transform playerStation2;
+    public Transform playerStation3;
+    public Transform playerStation4;
 	public Transform enemyStation;
 
-	Unit playerUnit;
+	Unit playerUnit1;
+    Unit playerUnit2;
+    Unit playerUnit3;
+    Unit playerUnit4;
 	Unit enemyUnit;
 
 	public BattleState state;
@@ -31,8 +41,15 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator SetUpBattle() {
         //Spawn players and enemies
-    	GameObject playerGO = Instantiate(playerPrefab, playerStation);
-    	playerUnit = playerGO.GetComponent<Unit>();
+    	GameObject playerGO1 = Instantiate(playerPrefab1, playerStation1);
+    	playerUnit1 = playerGO1.GetComponent<Unit>();
+        GameObject playerGO2 = Instantiate(playerPrefab2, playerStation2);
+        playerUnit2 = playerGO2.GetComponent<Unit>();
+        GameObject playerGO3 = Instantiate(playerPrefab3, playerStation3);
+        playerUnit3 = playerGO3.GetComponent<Unit>();
+        GameObject playerGO4 = Instantiate(playerPrefab4, playerStation4);
+        playerUnit4 = playerGO4.GetComponent<Unit>();
+
     	GameObject enemyGO = Instantiate(enemyPrefab, enemyStation);
     	enemyUnit = enemyGO.GetComponent<Unit>();
 
