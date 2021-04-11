@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
@@ -32,6 +33,12 @@ public class BattleSystem : MonoBehaviour
 	Unit enemyUnit;
 
 	public BattleState state;
+
+    public BattleHUD playerHUD;
+    public BattleHUD enemyHUD;
+
+    public Text dialogueText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,7 +60,10 @@ public class BattleSystem : MonoBehaviour
     	GameObject enemyGO = Instantiate(enemyPrefab, enemyStation);
     	enemyUnit = enemyGO.GetComponent<Unit>();
 
-        //Tutorial inserts code to change dialogue box to include enemy names, but may not need it
+        dialogueText.text = "Encountered a " + enemyUnit.unitName + ", prepare for battle!";
+
+        playerHUD.setHUD(playerUnit1);
+        enemyHUD.setHUD(enemyUnit);
 
         yield return new WaitForSeconds(3f);
 
@@ -62,26 +72,69 @@ public class BattleSystem : MonoBehaviour
         PlayerTurn();
     }
 
-    IEnumerator PlayerAttack() {
-        //deal damage
+    // IEnumerator PlayerAttack()
+    // {
+        // bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
 
-        yield return new WaitForSeconds(3f);
+        // enemyHUD.SetHP(enemyUnit.currentHP);
+        // dialogueText.text = "The attack is successful!";
 
-        //check if enemy is dead
-        //change state accordingly
+        // yield return new WaitForSeconds(3f);
 
+        // if(isDead)
+        // {
+        //     state = BattleState.WON;
+        //     EndBattle();
+        // } else {
+        //     state = BattleState.ENEMYTURN;
+        //     StartCoroutine(EnemyTurn());
+        // }
+    // }
+
+    // IEnumerator EnemyTurn()
+    // {
+    //     dialogueText.text = enemyUnit.unitName + " attacks!";
+
+    //     yield return new WaitForSeconds(1f);
+
+    //     bool isDead = playerUnit.TakeDamage(enemyUnit.damage);
+
+    //     playerHUD.SetHP(playerUnit.currentHP);
+
+    //     yield return new WaitForSeconds(1f);
+
+    //     if(isDead)
+    //     {
+    //         state = BattleState.LOST;
+    //         EndBattle();
+    //     } else {
+    //         state = BattleState.PLAYERTURN;
+    //         PlayerTurn();
+    //     }
+
+    //}
+
+    void EndBattle()
+    {
+        if(state == BattleState.WON)
+        {
+            dialogueText.text = "You won the battle!";
+        } else if (state == BattleState.LOST)
+        {
+            dialogueText.text = "You were defeated.";
+        }
     }
 
     //Method to represent player move selection.
     void PlayerTurn() {
-
+        dialogueText.text = "Choose an action:";
     }
 
     public void OnAttackButton() {
         if (state != BattleState.PLAYERTURN) {
             return;
         } else {
-            StartCoroutine(PlayerAttack());
+            //StartCoroutine(PlayerAttack());
         }
     }
 }

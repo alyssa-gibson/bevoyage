@@ -10,15 +10,15 @@ public class BattleStart : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        ProcessColission(collision.gameObject);
+        ProcessCollision(collision.gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        ProcessColission(collision.gameObject);
+        ProcessCollision(collision.gameObject);
     }
 
-    void ProcessColission(GameObject collider) { 
+    void ProcessCollision(GameObject collider) { 
         if (collider.CompareTag("Enemy"))
         {
             AttackPlayer();
