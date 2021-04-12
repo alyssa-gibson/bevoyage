@@ -3,7 +3,17 @@ guid: 8f550c4e160b843a9bdeb178cf0c42ed
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - playerPrefab1: {fileID: 2067945243378870618, guid: 2437aeb45b7c08742873eb980f197c6a, type: 3}
+  - playerPrefab2: {fileID: 7140578392119855467, guid: 617301eb2322c94449aa8d937be8c3ed, type: 3}
+  - playerPrefab3: {fileID: 3516040026932782834, guid: aba3847c0d5540e4e8238a6f68d10790, type: 3}
+  - playerPrefab4: {fileID: 2227237920100612649, guid: 9c3af3e8d7705c8429b0aa1dfbf452c3, type: 3}
+  - enemyPrefab: {fileID: 7046153434585823365, guid: da668e6ef79b18e4db5fae1cfffcc02a, type: 3}
+  - playerStation1: {instanceID: 0}
+  - playerStation2: {instanceID: 0}
+  - playerStation3: {instanceID: 0}
+  - playerStation4: {instanceID: 0}
+  - enemyStation: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
