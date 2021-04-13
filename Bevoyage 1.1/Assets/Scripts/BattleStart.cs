@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class BattleStart : MonoBehaviour
 {
-    public GameObject BattleBG;
-    public SpriteRenderer spriteRenderer;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

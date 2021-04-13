@@ -19,6 +19,7 @@ public class BattleHUD : MonoBehaviour
     {
         BattleUI.SetActive(true);
         AttackUI.SetActive(false);
+        Debug.Log("Made it to BattleHud Start()");
     }
 
     void attackMenuSwitch() {
