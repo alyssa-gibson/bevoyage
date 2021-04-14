@@ -19,4 +19,23 @@ public class Unit : MonoBehaviour
 
     //function to create move list
     //if move to select will overflow weight cap, don't allow
+
+    public bool TakeDamage(int dmg) //may change int to float
+    {
+
+        currentHP -= dmg;
+
+        if (currentHP <= 0)
+            return true;
+        else
+            return false;
+    }
+
+    public void Heal(int amount)
+    {
+        currentHP += amount;
+        if (currentHP > maxHP)
+            currentHP = maxHP;
+    }
+
 }

@@ -79,47 +79,71 @@ public class BattleSystem : MonoBehaviour
         PlayerTurn();
     }
 
-    // IEnumerator PlayerAttack()
-    // {
-        // bool isDead = enemyUnit.TakeDamage(playerUnit.damage);
+    //some code needs to be modified + sent to new method for damage phase
+    IEnumerator PlayerAttack()
+    {
+        float advantage = 1;
+        float critDamage = 0;
 
-        // enemyHUD.SetHP(enemyUnit.currentHP);
-        // dialogueText.text = "The attack is successful!";
+        //check to see if move has attribute advantage
 
-        // yield return new WaitForSeconds(3f);
+        //check to see if critical hit lands
 
-        // if(isDead)
-        // {
-        //     state = BattleState.WON;
-        //     EndBattle();
-        // } else {
-        //     state = BattleState.ENEMYTURN;
-        //     StartCoroutine(EnemyTurn());
-        // }
-    // }
+        //actual damage calculation
+        int damage = (int)((playerUnit1.power * advantage + critDamage) - enemyUnit.defense);
 
-    // IEnumerator EnemyTurn()
-    // {
-    //     dialogueText.text = enemyUnit.unitName + " attacks!";
+        //prevent negative damage
+        if (damage < 0) {
+            damage = 0;
+        }
 
-    //     yield return new WaitForSeconds(1f);
+        //apply damage
+        bool isDead = enemyUnit.TakeDamage(damage);
 
-    //     bool isDead = playerUnit.TakeDamage(enemyUnit.damage);
+        //enemyHUD.SetHP(enemyUnit.currentHP);
+        dialogueText.text = "The attack is successful!";
 
-    //     playerHUD.SetHP(playerUnit.currentHP);
+        yield return new WaitForSeconds(3f);
 
-    //     yield return new WaitForSeconds(1f);
+        if(isDead)
+        {
+            state = BattleState.WON;
+            EndBattle();
+        } else {
+            state = BattleState.ENEMYTURN;
+            StartCoroutine(EnemyTurn());
+        }
+    }
 
-    //     if(isDead)
-    //     {
-    //         state = BattleState.LOST;
-    //         EndBattle();
-    //     } else {
-    //         state = BattleState.PLAYERTURN;
-    //         PlayerTurn();
-    //     }
+    IEnumerator EnemyTurn()
+    {
+        dialogueText.text = enemyUnit.unitName + " attacks!";
 
-    //}
+        yield return new WaitForSeconds(3f);
+
+        float advantage = 1;
+        float critDamage = 0;
+
+        //actual damage calculation
+        int damage = (int)((enemyUnit.power * advantage + critDamage) - playerUnit1.defense);
+
+        //actual damage calculation
+        bool isDead = playerUnit1.TakeDamage(damage);
+
+        //playerHUD.SetHP(playerUnit1.currentHP);
+
+        yield return new WaitForSeconds(3f);
+
+        if(isDead)
+        {
+            state = BattleState.LOST;
+            EndBattle();
+        } else {
+            state = BattleState.PLAYERTURN;
+            PlayerTurn();
+        }
+
+    }
 
     void EndBattle()
     {
@@ -141,7 +165,7 @@ public class BattleSystem : MonoBehaviour
         if (state != BattleState.PLAYERTURN) {
             return;
         } else {
-            //StartCoroutine(PlayerAttack());
+            StartCoroutine(PlayerAttack());
         }
     }
 }
