@@ -359,6 +359,8 @@ MonoBehaviour:
   playerStation4: {fileID: 76239271}
   enemyStation: {fileID: 1858813916}
   state: 0
+  BattleUI: {fileID: 0}
+  AttackUI: {fileID: 0}
   playerHUD: {fileID: 0}
   enemyHUD: {fileID: 0}
   dialogueText: {fileID: 0}
@@ -885,7 +887,7 @@ GameObject:
   - component: {fileID: 1200831298}
   - component: {fileID: 1200831299}
   m_Layer: 0
-  m_Name: HUd2
+  m_Name: Hud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -914,7 +916,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1200831297}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23f346af689e24516bee183d1ccd0214, type: 3}
   m_Name: 
