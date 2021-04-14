@@ -472,6 +472,8 @@ MonoBehaviour:
   mainMenu: {fileID: 333787337}
   optionsMenu: {fileID: 1703003236}
   gameMenu: {fileID: 335581456}
+  battleMenu: {fileID: 0}
+  attackMenu: {fileID: 0}
 --- !u!1 &335581456
 GameObject:
   m_ObjectHideFlags: 0

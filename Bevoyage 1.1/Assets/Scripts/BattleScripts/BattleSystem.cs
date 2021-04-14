@@ -34,6 +34,9 @@ public class BattleSystem : MonoBehaviour
 
 	public BattleState state;
 
+    public GameObject BattleUI;
+    public GameObject AttackUI;
+
     public BattleHUD playerHUD;
     public BattleHUD enemyHUD;
 
@@ -47,6 +50,10 @@ public class BattleSystem : MonoBehaviour
     }
 
     IEnumerator SetUpBattle() {
+        //Activate menus
+        BattleUI.SetActive(true);
+        AttackUI.SetActive(false);
+
         //Spawn players and enemies
     	GameObject playerGO1 = Instantiate(playerPrefab1, playerStation1);
     	playerUnit1 = playerGO1.GetComponent<Unit>();
@@ -60,7 +67,7 @@ public class BattleSystem : MonoBehaviour
     	GameObject enemyGO = Instantiate(enemyPrefab, enemyStation);
     	enemyUnit = enemyGO.GetComponent<Unit>();
 
-        dialogueText.text = "Encountered a " + enemyUnit.unitName + ", prepare for battle!";
+        //dialogueText.text = "Encountered a " + enemyUnit.unitName + ", prepare for battle!";
 
         playerHUD.setHUD(playerUnit1);
         enemyHUD.setHUD(enemyUnit);

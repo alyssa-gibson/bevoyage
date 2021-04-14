@@ -8,7 +8,7 @@ public class MainMenuController : MonoBehaviour
 	public GameObject mainMenu;
     public GameObject optionsMenu;
     public GameObject gameMenu;
-    
+
     public void playGame() {
         SceneManager.LoadScene("OverworldMap");
     }
