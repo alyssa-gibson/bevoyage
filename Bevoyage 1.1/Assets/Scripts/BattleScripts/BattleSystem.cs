@@ -67,6 +67,8 @@ public class BattleSystem : MonoBehaviour
     	GameObject enemyGO = Instantiate(enemyPrefab, enemyStation);
     	enemyUnit = enemyGO.GetComponent<Unit>();
 
+    	//add all moves to player and enemy move stacks
+
         //dialogueText.text = "Encountered a " + enemyUnit.unitName + ", prepare for battle!";
 
         playerHUD.setHUD(playerUnit1);

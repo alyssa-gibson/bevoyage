@@ -17,8 +17,23 @@ public class Unit : MonoBehaviour
     public float maxHP;
     public float currentHP;
 
-    //function to create move list
-    //if move to select will overflow weight cap, don't allow
+    //move list variable, can either be array or linked list
+    //public Move[] moveDeck;
+    //public LinkedList <Move> moveDeck = new LinkedList <Move>();
+
+    public void addMove(Move moveFromInventory) {
+        //if move to select will overflow weight cap, don't allow
+        if (currentWeight + moveFromInventory.weight > weightCap) {
+            Debug.Log("Move not added, exceeds weight cost");
+        }
+        else {
+            //add to list
+            Debug.Log("Move successfully added");
+            currentWeight += moveFromInventory.weight;
+        }
+    }
+
+    /* Stat modifier functions */
 
     public bool TakeDamage(int dmg) //may change int to float
     {
