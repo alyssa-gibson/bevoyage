@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class Move : MonoBehaviour
 {
+    //For all moves
     public string moveName;
     public string attribute;
     public int weight;
+
+    //For attack moves
     public float power;
     public float critRate;
-    //public int numberOfHits;
+    public int hitCount;
 
-    //For support moves, heal percentage?
-    //public float healAmt;
+    //For healing moves
+    public float healAmt;
 
     //Method that checks attribute effectiveness. Returns a float for damage modifier.
     // public float isEffective(string unitAttribute) {

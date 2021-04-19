@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
+public enum BattleState { START, PLAYERTURN, ENEMYTURN, DAMAGE, WON, LOST }
 
 /* Future Notes: 
  * May change enum states to be move select phase + damage phase.
  * Refer to pseudocode sheet for game-specific mechanics.
+ * Assign UI elements to respective variables.
  * Scale up to include multiple characters.
  */
+
 
 public class BattleSystem : MonoBehaviour
 {
@@ -42,6 +44,9 @@ public class BattleSystem : MonoBehaviour
 
     public Text dialogueText;
 
+    Stack partyDeck, enemyDeck = new Stack();
+    public LinkedList <Move> partyTurnList, enemyTurnList = new LinkedList <Move>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -68,6 +73,26 @@ public class BattleSystem : MonoBehaviour
     	enemyUnit = enemyGO.GetComponent<Unit>();
 
     	//add all moves to player and enemy move stacks
+        foreach(Move mov in playerUnit1.moveDeck) {
+            partyDeck.Push(mov);
+        }
+        foreach(Move mov in playerUnit2.moveDeck) {
+            partyDeck.Push(mov);
+        }
+        foreach(Move mov in playerUnit3.moveDeck) {
+            partyDeck.Push(mov);
+        }
+        foreach(Move mov in playerUnit4.moveDeck) {
+            partyDeck.Push(mov);
+        }
+
+        foreach(Move mov in enemyUnit.moveDeck) {
+            partyDeck.Push(mov);
+        }
+
+        //shuffle the stacks
+        //partyDeck = partyDeck.OrderBy(x => rnd.Next());
+        //enemyDeck = enemyDeck.OrderBy(x => rnd.Next());
 
         //dialogueText.text = "Encountered a " + enemyUnit.unitName + ", prepare for battle!";
 
@@ -81,7 +106,8 @@ public class BattleSystem : MonoBehaviour
         PlayerTurn();
     }
 
-    //some code needs to be modified + sent to new method for damage phase
+    //move inside code to damageCalc(), this method is just to select moves.
+    //for move select, do not allow dead character moves to be selected.
     IEnumerator PlayerAttack()
     {
         float advantage = 1;
@@ -146,6 +172,12 @@ public class BattleSystem : MonoBehaviour
         }
 
     }
+
+    // IEnumerator damageCalc() {
+    //    //compare lists, execute damage calculation in order, use unit functions 
+    //    //check to see if characters are dead in each run
+    //    //if the character that's about to move is dead, display this and do nothing
+    // }
 
     void EndBattle()
     {

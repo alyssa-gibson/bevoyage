@@ -19,7 +19,7 @@ public class Unit : MonoBehaviour
 
     //move list variable, can either be array or linked list
     //public Move[] moveDeck;
-    //public LinkedList <Move> moveDeck = new LinkedList <Move>();
+    public LinkedList <Move> moveDeck = new LinkedList <Move>();
 
     public void addMove(Move moveFromInventory) {
         //if move to select will overflow weight cap, don't allow
@@ -28,6 +28,7 @@ public class Unit : MonoBehaviour
         }
         else {
             //add to list
+            moveDeck.AddLast(moveFromInventory);
             Debug.Log("Move successfully added");
             currentWeight += moveFromInventory.weight;
         }
