@@ -7,7 +7,9 @@ public class Move : MonoBehaviour
     //For all moves
     public string moveName;
     public string attribute;
-    public int weight;
+    public int weight; //minimum: 1, max: 5
+    public string moveOwner; //for attack animations
+    public int moveID; //for database
 
     //For attack moves
     public float power;

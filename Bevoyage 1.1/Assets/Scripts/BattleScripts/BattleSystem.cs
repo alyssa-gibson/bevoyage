@@ -45,8 +45,12 @@ public class BattleSystem : MonoBehaviour
 
     public Text dialogueText;
 
-    Stack partyDeck, enemyDeck = new Stack();
+    Stack partyDeck, enemyDeck = new Stack(); //for card selection
+    public Move[] partyFullDeck, enemyFullDeck = new Move[20];
+    public Move[] partyTurn, enemyTurn = new Move[5]; //holds the cards for a specific turn
     public LinkedList <Move> partyTurnList, enemyTurnList = new LinkedList <Move>();
+
+    int partyCounter, enemyCounter = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -81,27 +85,59 @@ public class BattleSystem : MonoBehaviour
     	GameObject enemyGO = Instantiate(enemyPrefab, enemyStation);
     	enemyUnit = enemyGO.GetComponent<Unit>();
 
-    	//add all moves to player and enemy move stacks
-        foreach(Move mov in playerUnit1.moveDeck) {
-            partyDeck.Push(mov);
+    	//add all moves to player and enemy decks
+
+        for (int i = 0; i < playerUnit1.moveDeck.Length; i++) {
+            partyFullDeck[partyCounter] = playerUnit1.moveDeck[i];
+            partyCounter++;
         }
-        foreach(Move mov in playerUnit2.moveDeck) {
-            partyDeck.Push(mov);
+        for (int i = 0; i < playerUnit2.moveDeck.Length; i++) {
+            partyFullDeck[(i+partyCounter)] = playerUnit2.moveDeck[i];
+            partyCounter++;
         }
-        foreach(Move mov in playerUnit3.moveDeck) {
-            partyDeck.Push(mov);
+        for (int i = 0; i < playerUnit3.moveDeck.Length; i++) {
+            partyFullDeck[(i+partyCounter)] = playerUnit3.moveDeck[i];
+            partyCounter++;
         }
-        foreach(Move mov in playerUnit4.moveDeck) {
-            partyDeck.Push(mov);
+        for (int i = 0; i < playerUnit4.moveDeck.Length; i++) {
+            partyFullDeck[(i+partyCounter)] = playerUnit4.moveDeck[i];
+            partyCounter++;
         }
 
-        foreach(Move mov in enemyUnit.moveDeck) {
-            partyDeck.Push(mov);
+        for (int i = 0; i < enemyUnit.moveDeck.Length; i++) {
+            enemyFullDeck[enemyCounter] = enemyUnit.moveDeck[i];
+            enemyCounter++;
         }
+        // foreach(Move mov in playerUnit1.moveDeck) {
+        //     partyFullDeck[partyCounter] = mov;
+        //     partyCounter++;
+        //     //partyDeck.Push(mov);
+        // }
+        // foreach(Move mov in playerUnit2.moveDeck) {
+        //     partyFullDeck[partyCounter] = mov;
+        //     partyCounter++;
+        //     //partyDeck.Push(mov);
+        // }
+        // foreach(Move mov in playerUnit3.moveDeck) {
+        //     partyFullDeck[partyCounter] = mov;
+        //     partyCounter++;
+        //     //partyDeck.Push(mov);
+        // }
+        // foreach(Move mov in playerUnit4.moveDeck) {
+        //     partyFullDeck[partyCounter] = mov;
+        //     partyCounter++;
+        //     //partyDeck.Push(mov);
+        // }
+        // foreach(Move mov in enemyUnit.moveDeck) {
+        //     enemyFullDeck[enemyCounter] = mov;
+        //     enemyCounter++;
+        //     //partyDeck.Push(mov);
+        // }
 
-        //shuffle the stacks
+        //fill stacks
         //partyDeck = partyDeck.OrderBy(x => rnd.Next());
         //enemyDeck = enemyDeck.OrderBy(x => rnd.Next());
+
 
         //dialogueText.text = "Encountered a " + enemyUnit.unitName + ", prepare for battle!";
 
@@ -119,6 +155,20 @@ public class BattleSystem : MonoBehaviour
     //for move select, do not allow dead character moves to be selected.
     IEnumerator PlayerAttack()
     {
+        //pop first 5 moves off stack into turn array
+        for (int i = 0; i < partyTurn.Length; i++) {
+            partyTurn[i] = (Move) partyDeck.Pop();
+        }
+
+        //insert method to display moves in UI here!
+
+        //check to see if stack is empty - if yes, restock w shuffled array
+        if(partyDeck.Count == 0) {
+            Debug.Log("Stack empty, reshuffling!");
+            //restock code here
+        }
+
+        //code to move starts here!
         float advantage = 1;
         float critDamage = 0;
 

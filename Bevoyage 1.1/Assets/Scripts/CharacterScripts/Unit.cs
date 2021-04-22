@@ -7,8 +7,8 @@ public class Unit : MonoBehaviour
     public string unitName;
     public string attribute;
     public float unitLevel;
-    public float weightCap;
-    public float currentWeight;
+    public float weightCap; //for battle cap only
+    //public float currentWeight;
 
     public float power;
     public float critRate;
@@ -18,21 +18,33 @@ public class Unit : MonoBehaviour
     public float currentHP;
 
     //move list variable, can either be array or linked list
-    //public Move[] moveDeck;
-    public LinkedList <Move> moveDeck = new LinkedList <Move>();
+    public Move[] moveDeck = new Move[5];
+    public LinkedList <Move> moveList = new LinkedList <Move>();
 
-    public void addMove(Move moveFromInventory) {
-        //if move to select will overflow weight cap, don't allow
-        if (currentWeight + moveFromInventory.weight > weightCap) {
-            Debug.Log("Move not added, exceeds weight cost");
-        }
-        else {
-            //add to list
-            moveDeck.AddLast(moveFromInventory);
-            Debug.Log("Move successfully added");
-            currentWeight += moveFromInventory.weight;
-        }
+    //method to add a move from a unit's known move list to their active deck
+    public void addMove(Move moveToActive, int pos) {
+        moveDeck[pos] = moveToActive;
+        Debug.Log("Move successfully added");
     }
+
+    //method to add a move to a unit's known move list
+    public void learnMove(Move moveToLearn) {
+        moveList.AddLast(moveToLearn);
+        Debug.Log("Move successfully learned");
+    }
+
+    // public void addMove(Move moveFromInventory) {
+    //     //if move to select will overflow weight cap, don't allow
+    //     if (currentWeight + moveFromInventory.weight > weightCap) {
+    //         Debug.Log("Move not added, exceeds weight cost");
+    //     }
+    //     else {
+    //         //add to list
+    //         moveDeck.AddLast(moveFromInventory);
+    //         Debug.Log("Move successfully added");
+    //         currentWeight += moveFromInventory.weight;
+    //     }
+    // }
 
     /* Stat modifier functions */
 
