@@ -359,8 +359,8 @@ MonoBehaviour:
   playerStation4: {fileID: 76239271}
   enemyStation: {fileID: 1858813916}
   state: 0
-  BattleUI: {fileID: 0}
-  AttackUI: {fileID: 0}
+  BattleUI: {fileID: 1353888698}
+  AttackUI: {fileID: 780742386}
   playerHUD: {fileID: 0}
   enemyHUD: {fileID: 0}
   dialogueText: {fileID: 0}
@@ -470,6 +470,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5183150881895107672, guid: b13972737b963d54883f138c675d3e70, type: 3}
   m_PrefabInstance: {fileID: 1094591360}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &780742386 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8166579459299393642, guid: c410a20fca2a614479c39852070f1dd6, type: 3}
+  m_PrefabInstance: {fileID: 947059081}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &947059081
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -479,7 +484,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 242654445202268082, guid: c410a20fca2a614479c39852070f1dd6, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1539261230006859675, guid: c410a20fca2a614479c39852070f1dd6, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -491,7 +496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3260445778753623351, guid: c410a20fca2a614479c39852070f1dd6, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4927695978606536151, guid: c410a20fca2a614479c39852070f1dd6, type: 3}
       propertyPath: m_FontData.m_Alignment
@@ -599,7 +604,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8166579459299393642, guid: c410a20fca2a614479c39852070f1dd6, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c410a20fca2a614479c39852070f1dd6, type: 3}
@@ -692,6 +697,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1200831298}
     m_Modifications:
+    - target: {fileID: 3247972875678128189, guid: b13972737b963d54883f138c675d3e70, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5183150881075011255, guid: b13972737b963d54883f138c675d3e70, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -174
+      objectReference: {fileID: 0}
     - target: {fileID: 5183150881895107672, guid: b13972737b963d54883f138c675d3e70, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -790,7 +803,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5183150881895107676, guid: b13972737b963d54883f138c675d3e70, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b13972737b963d54883f138c675d3e70, type: 3}
@@ -1008,6 +1021,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1353888698 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5183150881895107676, guid: b13972737b963d54883f138c675d3e70, type: 3}
+  m_PrefabInstance: {fileID: 1094591360}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1496547037
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, DAMAGE, WON, LOST }
 
@@ -50,11 +51,19 @@ public class BattleSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        state = BattleState.START;
-        StartCoroutine(SetUpBattle());
+        Scene scene = gameObject.scene;
+        if (scene.name == "BattleScene")
+        {
+
+            state = BattleState.START;
+            StartCoroutine(SetUpBattle());
+            Debug.Log("Made it to BattleSystem Start()");
+        }
+
     }
 
     IEnumerator SetUpBattle() {
+        Debug.Log("In SetUpBattle");
         //Activate menus
         BattleUI.SetActive(true);
         AttackUI.SetActive(false);

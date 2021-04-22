@@ -14,6 +14,11 @@ MonoImporter:
   - playerStation3: {instanceID: 0}
   - playerStation4: {instanceID: 0}
   - enemyStation: {instanceID: 0}
+  - BattleUI: {instanceID: 0}
+  - AttackUI: {instanceID: 0}
+  - playerHUD: {instanceID: 0}
+  - enemyHUD: {instanceID: 0}
+  - dialogueText: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

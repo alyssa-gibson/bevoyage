@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BattleHUD : MonoBehaviour
 {
@@ -17,9 +18,14 @@ public class BattleHUD : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        BattleUI.SetActive(true);
-        AttackUI.SetActive(false);
-        Debug.Log("Made it to BattleHud Start()");
+        Scene scene = gameObject.scene;
+        if(scene.name == "BattleScene")
+        {
+            BattleUI.SetActive(true);
+            AttackUI.SetActive(false);
+            Debug.Log("Made it to BattleHud Start()");
+        }
+       
     }
 
     void attackMenuSwitch() {
