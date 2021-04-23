@@ -27,15 +27,21 @@ public class BattleSystem : MonoBehaviour
     public Transform playerStation2;
     public Transform playerStation3;
     public Transform playerStation4;
-	public Transform enemyStation;
+	public Transform enemyStation1;
+    public Transform enemyStation2;
+    public Transform enemyStation3;
+    public Transform enemyStation4;
 
-	Unit playerUnit1;
+    Unit playerUnit1;
     Unit playerUnit2;
     Unit playerUnit3;
     Unit playerUnit4;
-	Unit enemyUnit;
+	Unit enemyUnit1;
+    Unit enemyUnit2;
+    Unit enemyUnit3;
+    Unit enemyUnit4;
 
-	public BattleState state;
+    public BattleState state;
 
     public GameObject BattleUI;
     public GameObject AttackUI;
@@ -58,12 +64,31 @@ public class BattleSystem : MonoBehaviour
         Scene scene = gameObject.scene;
         if (scene.name == "BattleScene")
         {
-
             state = BattleState.START;
             StartCoroutine(SetUpBattle());
             Debug.Log("Made it to BattleSystem Start()");
         }
 
+    }
+
+    // Button Management Scripts Start Here
+    public void attackMenuSwitch()
+    {
+        BattleUI.SetActive(false);
+        AttackUI.SetActive(true);
+    }
+
+    public void BackButtonSwitch()
+    {
+        BattleUI.SetActive(true);
+        AttackUI.SetActive(false);
+    }
+
+    public void FleeButton()
+    {
+        BattleUI.SetActive(false);
+        AttackUI.SetActive(false);
+        SceneManager.LoadScene("OverworldMap");
     }
 
     IEnumerator SetUpBattle() {
@@ -82,10 +107,16 @@ public class BattleSystem : MonoBehaviour
         GameObject playerGO4 = Instantiate(playerPrefab4, playerStation4);
         playerUnit4 = playerGO4.GetComponent<Unit>();
 
-    	GameObject enemyGO = Instantiate(enemyPrefab, enemyStation);
-    	enemyUnit = enemyGO.GetComponent<Unit>();
+    	GameObject enemyGO1 = Instantiate(enemyPrefab, enemyStation1);
+    	enemyUnit1 = enemyGO1.GetComponent<Unit>();
+        GameObject enemyGO2 = Instantiate(enemyPrefab, enemyStation2);
+        enemyUnit2 = enemyGO2.GetComponent<Unit>();
+        GameObject enemyGO3 = Instantiate(enemyPrefab, enemyStation3);
+        enemyUnit3 = enemyGO3.GetComponent<Unit>();
+        GameObject enemyGO4 = Instantiate(enemyPrefab, enemyStation4);
+        enemyUnit4 = enemyGO4.GetComponent<Unit>();
 
-    	//add all moves to player and enemy decks
+        //add all moves to player and enemy decks
 
         for (int i = 0; i < playerUnit1.moveDeck.Length; i++) {
             partyFullDeck[partyCounter] = playerUnit1.moveDeck[i];
@@ -104,8 +135,26 @@ public class BattleSystem : MonoBehaviour
             partyCounter++;
         }
 
-        for (int i = 0; i < enemyUnit.moveDeck.Length; i++) {
-            enemyFullDeck[enemyCounter] = enemyUnit.moveDeck[i];
+        for (int i = 0; i < enemyUnit1.moveDeck.Length; i++) {
+            enemyFullDeck[enemyCounter] = enemyUnit1.moveDeck[i];
+            enemyCounter++;
+        }
+
+        for (int i = 0; i < enemyUnit2.moveDeck.Length; i++)
+        {
+            enemyFullDeck[enemyCounter] = enemyUnit2.moveDeck[i];
+            enemyCounter++;
+        }
+
+        for (int i = 0; i < enemyUnit3.moveDeck.Length; i++)
+        {
+            enemyFullDeck[enemyCounter] = enemyUnit3.moveDeck[i];
+            enemyCounter++;
+        }
+
+        for (int i = 0; i < enemyUnit4.moveDeck.Length; i++)
+        {
+            enemyFullDeck[enemyCounter] = enemyUnit4.moveDeck[i];
             enemyCounter++;
         }
         // foreach(Move mov in playerUnit1.moveDeck) {
@@ -140,9 +189,9 @@ public class BattleSystem : MonoBehaviour
 
 
         //dialogueText.text = "Encountered a " + enemyUnit.unitName + ", prepare for battle!";
-
-        playerHUD.setHUD(playerUnit1);
-        enemyHUD.setHUD(enemyUnit);
+        Debug.Log("Right before playerhud set up");
+        playerHUD.setHUD(playerUnit1, playerUnit2, playerUnit3, playerUnit4); // refer to the PlayerCharStatusBar
+        enemyHUD.setHUD(enemyUnit1, enemyUnit2, enemyUnit3, enemyUnit4); // refer to the EnemyStatus Bar
 
         yield return new WaitForSeconds(3f);
 
@@ -177,7 +226,7 @@ public class BattleSystem : MonoBehaviour
         //check to see if critical hit lands
 
         //actual damage calculation
-        int damage = (int)((playerUnit1.power * advantage + critDamage) - enemyUnit.defense);
+        int damage = (int)((playerUnit1.power * advantage + critDamage) - enemyUnit1.defense);
 
         //prevent negative damage
         if (damage < 0) {
@@ -185,7 +234,7 @@ public class BattleSystem : MonoBehaviour
         }
 
         //apply damage
-        bool isDead = enemyUnit.TakeDamage(damage);
+        bool isDead = enemyUnit1.TakeDamage(damage);
 
         //enemyHUD.SetHP(enemyUnit.currentHP);
         dialogueText.text = "The attack is successful!";
@@ -204,7 +253,7 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator EnemyTurn()
     {
-        dialogueText.text = enemyUnit.unitName + " attacks!";
+        dialogueText.text = enemyUnit1.unitName + " attacks!";
 
         yield return new WaitForSeconds(3f);
 
@@ -212,7 +261,7 @@ public class BattleSystem : MonoBehaviour
         float critDamage = 0;
 
         //actual damage calculation
-        int damage = (int)((enemyUnit.power * advantage + critDamage) - playerUnit1.defense);
+        int damage = (int)((enemyUnit1.power * advantage + critDamage) - playerUnit1.defense);
 
         //actual damage calculation
         bool isDead = playerUnit1.TakeDamage(damage);

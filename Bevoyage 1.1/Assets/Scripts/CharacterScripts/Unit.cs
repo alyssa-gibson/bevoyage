@@ -17,6 +17,8 @@ public class Unit : MonoBehaviour
     public float maxHP;
     public float currentHP;
 
+    public Sprite image;
+
     //move list variable, can either be array or linked list
     public Move[] moveDeck = new Move[5];
     public LinkedList <Move> moveList = new LinkedList <Move>();

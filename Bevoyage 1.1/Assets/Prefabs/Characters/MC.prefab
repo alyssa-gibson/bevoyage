@@ -99,9 +99,15 @@ MonoBehaviour:
   attribute: Neutral
   unitLevel: 1
   weightCap: 2
-  currentWeight: 0
   power: 80
   critRate: 25
   defense: 75
   maxHP: 500
   currentHP: 500
+  image: {fileID: 21300000, guid: c96514cece7ae644b82100e5edf7d757, type: 3}
+  moveDeck:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

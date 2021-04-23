@@ -472,8 +472,6 @@ MonoBehaviour:
   mainMenu: {fileID: 333787337}
   optionsMenu: {fileID: 1703003236}
   gameMenu: {fileID: 335581456}
-  battleMenu: {fileID: 0}
-  attackMenu: {fileID: 0}
 --- !u!1 &335581456
 GameObject:
   m_ObjectHideFlags: 0
@@ -1243,7 +1241,7 @@ MonoBehaviour:
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
+  m_ForceModuleActive: 1
 --- !u!114 &956997812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1271,7 +1269,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1028047577
 GameObject:
@@ -1368,7 +1366,7 @@ RectTransform:
   - {fileID: 1703003237}
   - {fileID: 335581457}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1455,7 +1453,7 @@ Transform:
   m_LocalScale: {x: 1.6798888, y: 1.3746966, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1521087807
 GameObject:
@@ -1672,7 +1670,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1703003236
 GameObject:
