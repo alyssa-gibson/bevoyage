@@ -189,6 +189,8 @@ public class BattleSystem : MonoBehaviour
 
 
         //dialogueText.text = "Encountered a " + enemyUnit.unitName + ", prepare for battle!";
+        // May change up some more of the code here to get the data to show
+        // may even just have set up 
         Debug.Log("Right before playerhud set up");
         playerHUD.setHUD(playerUnit1, playerUnit2, playerUnit3, playerUnit4); // refer to the PlayerCharStatusBar
         enemyHUD.setHUD(enemyUnit1, enemyUnit2, enemyUnit3, enemyUnit4); // refer to the EnemyStatus Bar
