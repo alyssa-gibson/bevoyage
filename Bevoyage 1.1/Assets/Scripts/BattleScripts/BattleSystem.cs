@@ -41,11 +41,11 @@ public class BattleSystem : MonoBehaviour
     Unit enemyUnit3;
     Unit enemyUnit4;
 
-    public Button attackSlot1;
-    public Button attackSlot2;
-    public Button attackSlot3;
-    public Button attackSlot4; 
-    public Button attackSlot5;
+    public Button moveSlot1;
+    public Button moveSlot2;
+    public Button moveSlot3;
+    public Button moveSlot4; 
+    public Button moveSlot5;
 
     public BattleState state;
 
@@ -61,7 +61,8 @@ public class BattleSystem : MonoBehaviour
     public Move[] partyFullDeck, enemyFullDeck = new Move[20];
     public Move[] partyTurn, enemyTurn = new Move[5]; //holds the cards for a specific turn
     public LinkedList <Move> partyTurnList, enemyTurnList = new LinkedList <Move>();
-    public Move[] selectedAttacks = new Move[5]; //holds the cards that are selected
+    public Move[] selectedMoves = new Move[5]; //holds the cards that are selected
+    public int selectIndex = 0;
 
     int partyCounter, enemyCounter = 0;
 
@@ -75,7 +76,6 @@ public class BattleSystem : MonoBehaviour
             StartCoroutine(SetUpBattle());
             Debug.Log("Made it to BattleSystem Start()");
         }
-
     }
 
     // Button Management Scripts Start Here
@@ -322,21 +322,45 @@ public class BattleSystem : MonoBehaviour
 
     public void AttackSelect(Button button)
     {
-        Debug.Log("Attack Selected", button);
+        //check if the move weight is not exceded 
+        // if it is, do not allow 
+        if (button.name == "MoveChoice1") {
+            Debug.Log("In if 1" );
+            // selectedMoves[selectIndex] = partyTurn[0];
+        }
+        else if (button.name == "MoveChoice2"){
+            Debug.Log("In if 2" );
+            // selectedMoves[selectIndex] = partyTurn[1];
+        }
+        else if (button.name == "MoveChoice3"){
+            Debug.Log("In if 3" );
+            // selectedMoves[selectIndex] = partyTurn[2];
+        }
+        else if (button.name == "MoveChoice4"){
+            Debug.Log("In if 4" );
+            // selectedMoves[selectIndex] = partyTurn[3];
+        }
+        else
+        {
+            Debug.Log("In else 5" );
+            // selectedMoves[selectIndex] = partyTurn[4];
+        }
+        Debug.Log("Attack Selected " + button.name);
         button.interactable = false;
-        // Add to attack array
-        //selectedAttacks.append
+        //selectIndex++;
+
     }
 
     public void ResetAttack()
     {
-        attackSlot1.interactable = true;
-        attackSlot2.interactable = true;
-        attackSlot3.interactable = true;
-        attackSlot4.interactable = true;
-        attackSlot5.interactable = true;
+        moveSlot1.interactable = true;
+        moveSlot2.interactable = true;
+        moveSlot3.interactable = true;
+        moveSlot4.interactable = true;
+        moveSlot5.interactable = true;
         Debug.Log("Reset Clicked");
-        //selectedAttacks.clear
-        //selectedAttacks = Moves[5]
+        //selectedMoves.clear()
+        //selectedMoves = new Moves[5]
+        //selectIndex = 0;
     }
 }
