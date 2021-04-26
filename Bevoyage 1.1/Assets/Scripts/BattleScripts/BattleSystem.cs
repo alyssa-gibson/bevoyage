@@ -41,6 +41,12 @@ public class BattleSystem : MonoBehaviour
     Unit enemyUnit3;
     Unit enemyUnit4;
 
+    public Button attackSlot1;
+    public Button attackSlot2;
+    public Button attackSlot3;
+    public Button attackSlot4; 
+    public Button attackSlot5;
+
     public BattleState state;
 
     public GameObject BattleUI;
@@ -55,6 +61,7 @@ public class BattleSystem : MonoBehaviour
     public Move[] partyFullDeck, enemyFullDeck = new Move[20];
     public Move[] partyTurn, enemyTurn = new Move[5]; //holds the cards for a specific turn
     public LinkedList <Move> partyTurnList, enemyTurnList = new LinkedList <Move>();
+    public Move[] selectedAttacks = new Move[5]; //holds the cards that are selected
 
     int partyCounter, enemyCounter = 0;
 
@@ -311,5 +318,25 @@ public class BattleSystem : MonoBehaviour
         } else {
             StartCoroutine(PlayerAttack());
         }
+    }
+
+    public void AttackSelect(Button button)
+    {
+        Debug.Log("Attack Selected", button);
+        button.interactable = false;
+        // Add to attack array
+        //selectedAttacks.append
+    }
+
+    public void ResetAttack()
+    {
+        attackSlot1.interactable = true;
+        attackSlot2.interactable = true;
+        attackSlot3.interactable = true;
+        attackSlot4.interactable = true;
+        attackSlot5.interactable = true;
+        Debug.Log("Reset Clicked");
+        //selectedAttacks.clear
+        //selectedAttacks = Moves[5]
     }
 }
