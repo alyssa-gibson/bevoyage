@@ -61,11 +61,11 @@ public class BattleSystem : MonoBehaviour
     //public LinkedList <Move> partyTurnList, enemyTurnList = new LinkedList <Move>(); //code's borked
     public Move[] partyTurnList, enemyTurnList = new Move[5];
     public Move[] selectedMoves = new Move[5]; //holds the cards that are selected
-    public int selectIndex = 0;
+    int selectIndex = 0; // show how many cards are chosen
 
     int partyCounter, enemyCounter, partyGraveyard, enemyGraveyard = 0;
 
-    private readonly Random rng = new Random(); 
+    //private readonly Random rng = new Random(); 
 
     // Start is called before the first frame update
     void Start()
@@ -219,10 +219,12 @@ public class BattleSystem : MonoBehaviour
             partyTurn[i] = (Move) partyDeck.Pop();
         }
 
+        yield return new WaitForSeconds(3f); // Need a return but don't know what to return! -Emily
+
         //insert method to display moves in UI here!
 
         //check to see if stack is empty - if yes, restock w shuffled array
-        if(partyDeck.Count == 0) {
+        if (partyDeck.Count == 0) {
             Debug.Log("Stack empty, reshuffling!");
             //restock code here
         }
@@ -231,7 +233,7 @@ public class BattleSystem : MonoBehaviour
 
         //player finishes move selection, move to enemy selection phase
         Debug.Log("Player move selection finished");
-        state = BattleSystem.ENEMYTURN;
+        state = BattleState.ENEMYTURN;
         StartCoroutine(EnemyTurn());
     }
 
@@ -317,15 +319,15 @@ public class BattleSystem : MonoBehaviour
     			}
     		}
     		//if attacker is dead, don't calc damage
-    		if(attacker.currentHP == 0) {
+    		if(attacker.currentHP <= 0) {
     			dialogueText.text = attacker + "is incapacitated.";
     		} else {
     			//check to see if move has attribute advantage
 
 		    	//check to see if critical hit lands for attacker
-				critCheck = rng.Next(1,101);
+				critCheck = Random.Range(1,101);
 				if(critCheck > (100 - attacker.critRate)) {
-					critDamage = attacker.power * 1.5;
+					critDamage = attacker.power * 1.5f; // f added to make it a float value
 				}
 
 				//actual damage calculation for attacker
@@ -338,13 +340,13 @@ public class BattleSystem : MonoBehaviour
 
 		        //apply damage
 		        isDead = defender.TakeDamage(damage);
-		        if (damage = 0) {
+		        if (damage == 0) {
 		        	Debug.Log("No damage taken!");
 		        }
 		        if(playerMove.weight < enemyMove.weight) {
-		        	enemyHUD.SetHP(defender.currentHP);
+		        	enemyHUD.SetHP(defender.currentHP, defender.unitName);
 	        	} else {
-	        		playerHUD.SetHP(defender.currentHP);
+	        		playerHUD.SetHP(defender.currentHP, defender.unitName);
 	        	}
 
 	        	dialogueText.text = attacker.unitName + "attacks " + defender.unitName + "for " + damage + "!";
@@ -364,14 +366,14 @@ public class BattleSystem : MonoBehaviour
 
     		//defender's turn, same rules as attacker
     		if(attacker.currentHP == 0) {
-    			dialogueText(attacker + "is incapacitated.");
+                dialogueText.text = attacker.unitName + "is incapacitated.";
     		} else {
     			//check to see if move has attribute advantage
 
 		    	//check to see if critical hit lands for attacker
-				critCheck = rng.Next(1,101);
+				critCheck = Random.Range(1,101);
 				if(critCheck > (100 - defender.critRate)) {
-					critDamage = defender.power * 1.5;
+					critDamage = defender.power * 1.5f;
 				}
 
 				//actual damage calculation for attacker
@@ -384,13 +386,13 @@ public class BattleSystem : MonoBehaviour
 
 		        //apply damage
 		        isDead = defender.TakeDamage(damage);
-		        if (damage = 0) {
+		        if (damage == 0) {
 		        	Debug.Log("No damage taken!");
 		        }
 		        if(playerMove.weight < enemyMove.weight) {
-		        	playerHUD.SetHP(attacker.currentHP);
+		        	playerHUD.SetHP(attacker.currentHP, attacker.unitName);
 	        	} else {
-	        		enemyHUD.SetHP(attacker.currentHP);
+	        		enemyHUD.SetHP(attacker.currentHP, attacker.unitName);
 	        	}
 
 	        	dialogueText.text = defender.unitName + "attacks " + attacker.unitName + "for " + damage + "!";
@@ -455,29 +457,31 @@ public class BattleSystem : MonoBehaviour
         //check if the move weight is not exceded 
         // if it is, do not allow 
         if (button.name == "MoveChoice1") {
-            Debug.Log("In if 1" );
+            Debug.Log("In if 1");
             // selectedMoves[selectIndex] = partyTurn[0];
         }
         else if (button.name == "MoveChoice2"){
-            Debug.Log("In if 2" );
+            Debug.Log("In if 2");
             // selectedMoves[selectIndex] = partyTurn[1];
         }
         else if (button.name == "MoveChoice3"){
-            Debug.Log("In if 3" );
+            Debug.Log("In if 3");
             // selectedMoves[selectIndex] = partyTurn[2];
         }
         else if (button.name == "MoveChoice4"){
-            Debug.Log("In if 4" );
+            Debug.Log("In if 4");
             // selectedMoves[selectIndex] = partyTurn[3];
         }
         else
         {
-            Debug.Log("In else 5" );
+            Debug.Log("In else 5");
             // selectedMoves[selectIndex] = partyTurn[4];
         }
-        Debug.Log("Attack Selected " + button.name);
+
         button.interactable = false;
-        //selectIndex++;
+        selectIndex++;
+        Debug.Log("Attack Selected " + button.name);
+        Debug.Log("Number of moves selected:" + selectIndex);
 
     }
 
@@ -491,6 +495,6 @@ public class BattleSystem : MonoBehaviour
         Debug.Log("Reset Clicked");
         //selectedMoves.clear()
         //selectedMoves = new Moves[5]
-        //selectIndex = 0;
+        selectIndex = 0;
     }
 }

@@ -75,7 +75,23 @@ public class BattleHUD : MonoBehaviour
         char4Image.GetComponent<Image>().sprite = unit4.image;
     }
 
-    public void setHP(int hp, Slider hpSlider){
-        hpSlider.value = hp;
+    public void SetHP(float hp, string name){
+        if(name == charName1.ToString())
+        {
+            char1Slider.value = hp;
+        }
+        else if (name == charName2.ToString())
+        {
+            char2Slider.value = hp;
+        }
+        else if (name == charName3.ToString())
+        {
+            char3Slider.value = hp;
+        }
+        else
+        {
+            char4Slider.value = hp;
+        }
+
     }
 }
