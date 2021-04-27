@@ -7,10 +7,8 @@ using UnityEngine.SceneManagement;
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, DAMAGE, WON, LOST }
 
 /* Future Notes: 
- * May change enum states to be move select phase + damage phase.
  * Refer to pseudocode sheet for game-specific mechanics.
  * Assign UI elements to respective variables.
- * Scale up to include multiple characters.
  */
 
 
@@ -60,11 +58,14 @@ public class BattleSystem : MonoBehaviour
     Stack partyDeck, enemyDeck = new Stack(); //for card selection
     public Move[] partyFullDeck, enemyFullDeck = new Move[20];
     public Move[] partyTurn, enemyTurn = new Move[5]; //holds the cards for a specific turn
-    public LinkedList <Move> partyTurnList, enemyTurnList = new LinkedList <Move>();
+    //public LinkedList <Move> partyTurnList, enemyTurnList = new LinkedList <Move>(); //code's borked
+    public Move[] partyTurnList, enemyTurnList = new Move[5];
     public Move[] selectedMoves = new Move[5]; //holds the cards that are selected
     public int selectIndex = 0;
 
-    int partyCounter, enemyCounter = 0;
+    int partyCounter, enemyCounter, partyGraveyard, enemyGraveyard = 0;
+
+    private readonly Random rng = new Random(); 
 
     // Start is called before the first frame update
     void Start()
@@ -190,12 +191,12 @@ public class BattleSystem : MonoBehaviour
         //     //partyDeck.Push(mov);
         // }
 
-        //fill stacks
+        //shuffle stacks
         //partyDeck = partyDeck.OrderBy(x => rnd.Next());
         //enemyDeck = enemyDeck.OrderBy(x => rnd.Next());
 
 
-        //dialogueText.text = "Encountered a " + enemyUnit.unitName + ", prepare for battle!";
+        dialogueText.text = "Encountered enemies, prepare for battle!";
         // May change up some more of the code here to get the data to show
         // may even just have set up 
         Debug.Log("Right before playerhud set up");
@@ -226,75 +227,204 @@ public class BattleSystem : MonoBehaviour
             //restock code here
         }
 
-        //code to move starts here!
-        float advantage = 1;
-        float critDamage = 0;
+        //insert method to select moves here!
 
-        //check to see if move has attribute advantage
-
-        //check to see if critical hit lands
-
-        //actual damage calculation
-        int damage = (int)((playerUnit1.power * advantage + critDamage) - enemyUnit1.defense);
-
-        //prevent negative damage
-        if (damage < 0) {
-            damage = 0;
-        }
-
-        //apply damage
-        bool isDead = enemyUnit1.TakeDamage(damage);
-
-        //enemyHUD.SetHP(enemyUnit.currentHP);
-        dialogueText.text = "The attack is successful!";
-
-        yield return new WaitForSeconds(3f);
-
-        if(isDead)
-        {
-            state = BattleState.WON;
-            EndBattle();
-        } else {
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
-        }
+        //player finishes move selection, move to enemy selection phase
+        Debug.Log("Player move selection finished");
+        state = BattleSystem.ENEMYTURN;
+        StartCoroutine(EnemyTurn());
     }
 
     IEnumerator EnemyTurn()
     {
-        dialogueText.text = enemyUnit1.unitName + " attacks!";
+    	dialogueText.text = "Waiting for enemy move selection...";
 
-        yield return new WaitForSeconds(3f);
+    	yield return new WaitForSeconds(3f);
 
-        float advantage = 1;
-        float critDamage = 0;
+    	//insert enemy move array filling code here, similar to players
 
-        //actual damage calculation
-        int damage = (int)((enemyUnit1.power * advantage + critDamage) - playerUnit1.defense);
-
-        //actual damage calculation
-        bool isDead = playerUnit1.TakeDamage(damage);
-
-        //playerHUD.SetHP(playerUnit1.currentHP);
-
-        yield return new WaitForSeconds(3f);
-
-        if(isDead)
-        {
-            state = BattleState.LOST;
-            EndBattle();
-        } else {
-            state = BattleState.PLAYERTURN;
-            PlayerTurn();
-        }
+    	//selection finished, move to damage phase
+    	Debug.Log("Enemy move selection finished");
+    	state = BattleState.DAMAGE;
+    	StartCoroutine(damageCalc());
 
     }
 
-    // IEnumerator damageCalc() {
-    //    //compare lists, execute damage calculation in order, use unit functions 
-    //    //check to see if characters are dead in each run
-    //    //if the character that's about to move is dead, display this and do nothing
-    // }
+    IEnumerator damageCalc() {
+    	Debug.Log("Made it to damage phase");
+
+   		//toggle UI menus back to the main battle menu
+    	
+    	//compare lists, execute damage calculation in order, use unit functions
+
+    	/* TO DO:
+    	 * 
+    	 */
+    	for (int i = 0; i < 5; i++) {
+    		float advantage = 1;
+    		float critDamage = 0;
+    		float critCheck;
+    		bool isDead;
+
+    		Move playerMove = partyTurnList[i];
+    		Move enemyMove = enemyTurnList[i];
+    		Unit attacker, defender;
+    		if(playerMove.weight < enemyMove.weight) {
+    			Debug.Log("Player moves first!");
+    			//assign attacker to corresponding player
+    			if(playerUnit1.unitName == playerMove.moveOwner) {
+    				attacker = playerUnit1;
+    			} else if(playerUnit2.unitName == playerMove.moveOwner) {
+    				attacker = playerUnit2;
+    			} else if(playerUnit3.unitName == playerMove.moveOwner) {
+    				attacker = playerUnit3;
+    			} else {
+    				attacker = playerUnit4;
+    			}
+
+    			//assign defender to corresponding enemy
+    			if(enemyUnit1.unitName == enemyMove.moveOwner) {
+    				defender = enemyUnit1;
+    			} else if(enemyUnit2.unitName == enemyMove.moveOwner) {
+    				defender = enemyUnit2;
+    			} else if(enemyUnit3.unitName == enemyMove.moveOwner) {
+    				defender = enemyUnit3;
+    			} else {
+    				defender = enemyUnit4;
+    			}
+    		} else {
+    			Debug.Log("Enemy moves first!");
+    			//assign attacker to corresponding enemy
+    			if(enemyUnit1.unitName == enemyMove.moveOwner) {
+    				attacker = enemyUnit1;
+    			} else if(enemyUnit2.unitName == enemyMove.moveOwner) {
+    				attacker = enemyUnit2;
+    			} else if(enemyUnit3.unitName == enemyMove.moveOwner) {
+    				attacker = enemyUnit3;
+    			} else {
+    				attacker = enemyUnit4;
+    			}
+
+    			//assign defender to corresponding player
+    			if(playerUnit1.unitName == playerMove.moveOwner) {
+    				defender = playerUnit1;
+    			} else if(playerUnit2.unitName == playerMove.moveOwner) {
+    				defender = playerUnit2;
+    			} else if(playerUnit3.unitName == playerMove.moveOwner) {
+    				defender = playerUnit3;
+    			} else {
+    				defender = playerUnit4;
+    			}
+    		}
+    		//if attacker is dead, don't calc damage
+    		if(attacker.currentHP == 0) {
+    			dialogueText.text = attacker + "is incapacitated.";
+    		} else {
+    			//check to see if move has attribute advantage
+
+		    	//check to see if critical hit lands for attacker
+				critCheck = rng.Next(1,101);
+				if(critCheck > (100 - attacker.critRate)) {
+					critDamage = attacker.power * 1.5;
+				}
+
+				//actual damage calculation for attacker
+		   		int damage = (int)((attacker.power * advantage + critDamage) - defender.defense);
+
+		        //if damage is negative, set to 0 (no damage taken)
+		        if (damage < 0) {
+		            damage = 0;
+		        }
+
+		        //apply damage
+		        isDead = defender.TakeDamage(damage);
+		        if (damage = 0) {
+		        	Debug.Log("No damage taken!");
+		        }
+		        if(playerMove.weight < enemyMove.weight) {
+		        	enemyHUD.SetHP(defender.currentHP);
+	        	} else {
+	        		playerHUD.SetHP(defender.currentHP);
+	        	}
+
+	        	dialogueText.text = attacker.unitName + "attacks " + defender.unitName + "for " + damage + "!";
+
+	        	yield return new WaitForSeconds(2f);
+
+	        	//if dead, add to respective graveyard
+	        	if(isDead) {
+	        		dialogueText.text = defender.unitName + "is defeated!";
+	        		if(defender.type == 'p') {
+	        			partyGraveyard++;
+	        		} else {
+	        			enemyGraveyard++;
+	        		}
+	        	}
+    		}
+
+    		//defender's turn, same rules as attacker
+    		if(attacker.currentHP == 0) {
+    			dialogueText(attacker + "is incapacitated.");
+    		} else {
+    			//check to see if move has attribute advantage
+
+		    	//check to see if critical hit lands for attacker
+				critCheck = rng.Next(1,101);
+				if(critCheck > (100 - defender.critRate)) {
+					critDamage = defender.power * 1.5;
+				}
+
+				//actual damage calculation for attacker
+		   		int damage = (int)((defender.power * advantage + critDamage) - attacker.defense);
+
+		        //if damage is negative, set to 0 (no damage taken)
+		        if (damage < 0) {
+		            damage = 0;
+		        }
+
+		        //apply damage
+		        isDead = defender.TakeDamage(damage);
+		        if (damage = 0) {
+		        	Debug.Log("No damage taken!");
+		        }
+		        if(playerMove.weight < enemyMove.weight) {
+		        	playerHUD.SetHP(attacker.currentHP);
+	        	} else {
+	        		enemyHUD.SetHP(attacker.currentHP);
+	        	}
+
+	        	dialogueText.text = defender.unitName + "attacks " + attacker.unitName + "for " + damage + "!";
+
+	        	yield return new WaitForSeconds(2f);
+
+	        	//if dead, add to respective graveyard
+	        	if(isDead) {
+	        		dialogueText.text = attacker.unitName + "is defeated!";
+	        		if(attacker.type == 'p') {
+	        			partyGraveyard++;
+	        		} else {
+	        			enemyGraveyard++;
+	        		}
+	        	}
+    		}
+    	}
+    	//check both parties to see if all are incapacitated, if so determine win/loss
+		if(partyGraveyard == 4) {
+			state = BattleState.LOST;
+        	EndBattle();
+		}
+
+		if(enemyGraveyard == 4) {
+			state = BattleState.WON;
+        	EndBattle();
+		}
+		
+
+		//if both parties aren't dead, continue back to player turn
+		state = BattleState.PLAYERTURN;
+		PlayerTurn();
+
+    }
 
     void EndBattle()
     {

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     public string unitName;
+    public char type;
     public string attribute;
     public float unitLevel;
     public float weightCap; //for battle cap only
