@@ -14,14 +14,16 @@ public enum BattleState { START, PLAYERTURN, ENEMYTURN, DAMAGE, WON, LOST }
 
 public class BattleSystem : MonoBehaviour
 {
-
 	public GameObject playerPrefab1;
     public GameObject playerPrefab2;
     public GameObject playerPrefab3;
     public GameObject playerPrefab4;
-	public GameObject enemyPrefab;
+	public GameObject enemyPrefab1;
+    public GameObject enemyPrefab2;
+    public GameObject enemyPrefab3;
+    public GameObject enemyPrefab4;
 
-	public Transform playerStation1;
+    public Transform playerStation1;
     public Transform playerStation2;
     public Transform playerStation3;
     public Transform playerStation4;
@@ -65,7 +67,7 @@ public class BattleSystem : MonoBehaviour
 
     int partyCounter, enemyCounter, partyGraveyard, enemyGraveyard = 0;
 
-    //private readonly Random rng = new Random(); 
+    float weightCap = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -115,14 +117,16 @@ public class BattleSystem : MonoBehaviour
         GameObject playerGO4 = Instantiate(playerPrefab4, playerStation4);
         playerUnit4 = playerGO4.GetComponent<Unit>();
 
-    	GameObject enemyGO1 = Instantiate(enemyPrefab, enemyStation1);
+    	GameObject enemyGO1 = Instantiate(enemyPrefab1, enemyStation1);
     	enemyUnit1 = enemyGO1.GetComponent<Unit>();
-        GameObject enemyGO2 = Instantiate(enemyPrefab, enemyStation2);
+        GameObject enemyGO2 = Instantiate(enemyPrefab2, enemyStation2);
         enemyUnit2 = enemyGO2.GetComponent<Unit>();
-        GameObject enemyGO3 = Instantiate(enemyPrefab, enemyStation3);
+        GameObject enemyGO3 = Instantiate(enemyPrefab3, enemyStation3);
         enemyUnit3 = enemyGO3.GetComponent<Unit>();
-        GameObject enemyGO4 = Instantiate(enemyPrefab, enemyStation4);
+        GameObject enemyGO4 = Instantiate(enemyPrefab4, enemyStation4);
         enemyUnit4 = enemyGO4.GetComponent<Unit>();
+
+        weightCap = weightCap = playerUnit1.weightCap + playerUnit2.weightCap + playerUnit3.weightCap + playerUnit4.weightCap;
 
         //add all moves to player and enemy decks
 
@@ -195,7 +199,6 @@ public class BattleSystem : MonoBehaviour
         //partyDeck = partyDeck.OrderBy(x => rnd.Next());
         //enemyDeck = enemyDeck.OrderBy(x => rnd.Next());
 
-
         dialogueText.text = "Encountered enemies, prepare for battle!";
         // May change up some more of the code here to get the data to show
         // may even just have set up 
@@ -219,7 +222,7 @@ public class BattleSystem : MonoBehaviour
             partyTurn[i] = (Move) partyDeck.Pop();
         }
 
-        yield return new WaitForSeconds(3f); // Need a return but don't know what to return! -Emily
+        yield return new WaitForSeconds(3f); // Need a return bc it's ienumerator but don't know what to return! -Emily
 
         //insert method to display moves in UI here!
 
@@ -230,6 +233,7 @@ public class BattleSystem : MonoBehaviour
         }
 
         //insert method to select moves here!
+        // ^- This would be the time to allow the user to choose their moves
 
         //player finishes move selection, move to enemy selection phase
         Debug.Log("Player move selection finished");
@@ -239,9 +243,10 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator EnemyTurn()
     {
-    	dialogueText.text = "Waiting for enemy move selection...";
+        dialogueText.text = "Waiting for enemy move selection...";
+        BackButtonSwitch(); // Incase the Player went first, switch menus
 
-    	yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(3f);
 
     	//insert enemy move array filling code here, similar to players
 
@@ -254,15 +259,15 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator damageCalc() {
     	Debug.Log("Made it to damage phase");
+        BackButtonSwitch(); // Switch menus to see the field
+        //toggle UI menus back to the main battle menu
 
-   		//toggle UI menus back to the main battle menu
-    	
-    	//compare lists, execute damage calculation in order, use unit functions
+        //compare lists, execute damage calculation in order, use unit functions
 
-    	/* TO DO:
+        /* TO DO:
     	 * 
     	 */
-    	for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
     		float advantage = 1;
     		float critDamage = 0;
     		float critCheck;
@@ -420,7 +425,6 @@ public class BattleSystem : MonoBehaviour
 			state = BattleState.WON;
         	EndBattle();
 		}
-		
 
 		//if both parties aren't dead, continue back to player turn
 		state = BattleState.PLAYERTURN;
@@ -454,27 +458,64 @@ public class BattleSystem : MonoBehaviour
 
     public void AttackSelect(Button button)
     {
-        //check if the move weight is not exceded 
-        // if it is, do not allow 
+        //calculate current weight of chosen moves
+        /*
+        int currentWeight = 0;
+        for(int i=0; i<selectIndex; i++)
+        {
+            currentWeight = currentWeight + selectedMoves[i].weight;
+        }
+        */
+        // check which move it was and see if it will fit the weightcap 
         if (button.name == "MoveChoice1") {
             Debug.Log("In if 1");
+            /*
+            if(currentWeight + partyTurn[0] >= weightCap){
+                Debug.Log("Cannot Select!");
+                break
+            }
+            */
             // selectedMoves[selectIndex] = partyTurn[0];
         }
         else if (button.name == "MoveChoice2"){
             Debug.Log("In if 2");
+            /*
+            if (currentWeight + partyTurn[1] >= weightCap){
+                Debug.Log("Cannot Select!");
+                break
+            }
+            */
             // selectedMoves[selectIndex] = partyTurn[1];
         }
         else if (button.name == "MoveChoice3"){
             Debug.Log("In if 3");
+            /*
+            if (currentWeight + partyTurn[2] >= weightCap){
+                Debug.Log("Cannot Select!");
+                break
+            }
+            */
             // selectedMoves[selectIndex] = partyTurn[2];
         }
         else if (button.name == "MoveChoice4"){
             Debug.Log("In if 4");
+            /*
+            if (currentWeight + partyTurn[3] >= weightCap){
+                Debug.Log("Cannot Select!");
+                break
+            }
+            */
             // selectedMoves[selectIndex] = partyTurn[3];
         }
         else
         {
             Debug.Log("In else 5");
+            /*
+            if (currentWeight + partyTurn[4] >= weightCap){
+                Debug.Log("Cannot Select!");
+                break
+            }
+            */
             // selectedMoves[selectIndex] = partyTurn[4];
         }
 

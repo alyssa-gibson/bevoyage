@@ -749,8 +749,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd3c2b1c1094f2844939dd59d021c148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BattleBG: {fileID: 0}
-  spriteRenderer: {fileID: 0}
 --- !u!1 &502300128
 GameObject:
   m_ObjectHideFlags: 0

@@ -496,7 +496,10 @@ MonoBehaviour:
   playerPrefab2: {fileID: 7140578392119855467, guid: 617301eb2322c94449aa8d937be8c3ed, type: 3}
   playerPrefab3: {fileID: 2227237920100612649, guid: 9c3af3e8d7705c8429b0aa1dfbf452c3, type: 3}
   playerPrefab4: {fileID: 3516040026932782834, guid: aba3847c0d5540e4e8238a6f68d10790, type: 3}
-  enemyPrefab: {fileID: 7046153434585823365, guid: da668e6ef79b18e4db5fae1cfffcc02a, type: 3}
+  enemyPrefab1: {fileID: 7046153434585823365, guid: da668e6ef79b18e4db5fae1cfffcc02a, type: 3}
+  enemyPrefab2: {fileID: 5357493711568920351, guid: d9a79c906ca7e2246bfefa2949391875, type: 3}
+  enemyPrefab3: {fileID: 5209838846628141023, guid: 2a7382b48f403d845a750a585438e27e, type: 3}
+  enemyPrefab4: {fileID: 4894560469176013947, guid: 0b801431632af1147a7613d1bde86d15, type: 3}
   playerStation1: {fileID: 1126358821}
   playerStation2: {fileID: 13003707}
   playerStation3: {fileID: 1201516824}
@@ -545,13 +548,19 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  partyTurnList: []
+  enemyTurnList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   selectedMoves:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  selectIndex: 0
 --- !u!4 &398094844
 Transform:
   m_ObjectHideFlags: 0
