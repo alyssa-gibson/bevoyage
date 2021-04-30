@@ -107,8 +107,8 @@ MonoBehaviour:
   currentHP: 1000
   image: {fileID: 0}
   moveDeck:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 6466130197911050568, guid: 011a13decfb2ca44684159532649f094, type: 3}
+  - {fileID: 2251728405765898082, guid: e99041cd8a28c3b49be8ef70b22a3432, type: 3}
+  - {fileID: 1520522145261289221, guid: e45818cea0442c343ac90b5bf560e50e, type: 3}
+  - {fileID: 2413411626514434501, guid: a69655d7e5c52454da724d6b347ea0d6, type: 3}
+  - {fileID: 1736462956378565877, guid: d4d920e5ed0df594cb86a54f3d74fd13, type: 3}
