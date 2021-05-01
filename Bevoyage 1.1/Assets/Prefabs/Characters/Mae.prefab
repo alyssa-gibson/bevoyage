@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Mae
+  type: 0
   attribute: Spiced
   unitLevel: 1
   weightCap: 1
@@ -106,8 +107,8 @@ MonoBehaviour:
   currentHP: 350
   image: {fileID: 21300000, guid: e26be5ec28a45414c8dc7286d203ac8c, type: 3}
   moveDeck:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 5337590651558296844, guid: c8f4d05d6b7068047b19d83b92b0bd7f, type: 3}
+  - {fileID: 1308170541155452750, guid: 8f532e7cd88054244aa4f39952fb7972, type: 3}
+  - {fileID: 3860705982574384506, guid: ee5f3d7bf3a69164790ebd79519fa677, type: 3}
+  - {fileID: 1762685546902057623, guid: 15e40e21a939d494eb64326d75abd817, type: 3}
+  - {fileID: 5076494611380949535, guid: 59e5f295001b8e7419186e3d4515ed12, type: 3}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2067945243378870613}
   - component: {fileID: 2067945243378870612}
   m_Layer: 0
-  m_Name: MC
+  m_Name: Aki
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,7 +95,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86464ad6b2bee412aac8b87d21751278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: MC
+  unitName: Aki
+  type: 0
   attribute: Neutral
   unitLevel: 1
   weightCap: 2
@@ -106,8 +107,8 @@ MonoBehaviour:
   currentHP: 500
   image: {fileID: 21300000, guid: c96514cece7ae644b82100e5edf7d757, type: 3}
   moveDeck:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1774599700485225392, guid: dcba7d9cee8826f4fa2b828760ae7f4d, type: 3}
+  - {fileID: 1597617910700174798, guid: e4fba58bac48e4e42aab84cad0c8e3b0, type: 3}
+  - {fileID: 5710072389034497298, guid: 00f0f6f4a6d041344b94c2b988add7f2, type: 3}
+  - {fileID: 8042545054447631207, guid: 6e236aa013cf30e478ddb95922120896, type: 3}
+  - {fileID: 7416337147042949045, guid: 8c0f9c1766417774ea130207e15e82c0, type: 3}

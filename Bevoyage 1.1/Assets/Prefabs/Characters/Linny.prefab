@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Linny
+  type: 0
   attribute: Bitter
   unitLevel: 1
   weightCap: 1
@@ -106,8 +107,8 @@ MonoBehaviour:
   currentHP: 400
   image: {fileID: 21300000, guid: fda504f192a27a24597e4b20f4444a75, type: 3}
   moveDeck:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1966883246876889172, guid: 9c9d412c30dc83c46beab5476b607414, type: 3}
+  - {fileID: 3517018543846456738, guid: 4eb9e5dbd2806a84796939646555e6f0, type: 3}
+  - {fileID: 5080730212106793308, guid: 51af9a5cd6565c24ca08aea649ccf081, type: 3}
+  - {fileID: 525692743500051559, guid: 58a9bbd6e474b4744918f6f941d6b3c0, type: 3}
+  - {fileID: 5814599609435194806, guid: cc74bd409ee69ac4e9e4fdbd4f852f55, type: 3}

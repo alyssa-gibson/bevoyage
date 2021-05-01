@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Ripple
+  type: 0
   attribute: Sweet
   unitLevel: 1
   weightCap: 1
@@ -106,8 +107,8 @@ MonoBehaviour:
   currentHP: 800
   image: {fileID: 21300000, guid: c3007688f668ff04d97b71b5a464cd2e, type: 3}
   moveDeck:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 502036676653429984, guid: 16139c2e0ebaec147b21b73d4367e7c3, type: 3}
+  - {fileID: 50908284356356002, guid: 2c303536e31b45b47a8ff45b5c68f6d1, type: 3}
+  - {fileID: 5234709186958338988, guid: f6f73f0e89ab19b449ffb49100bd30f9, type: 3}
+  - {fileID: 4525415795600906623, guid: baeefb3ae592f804485b1c74a6f5db61, type: 3}
+  - {fileID: 5622440931968875658, guid: da72ce39c8d5cfa4898eccb97bd2a0a4, type: 3}
