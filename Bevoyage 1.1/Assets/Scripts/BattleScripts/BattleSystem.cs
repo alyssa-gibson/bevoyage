@@ -74,6 +74,7 @@ public class BattleSystem : MonoBehaviour
     int partyCounter, enemyCounter, partyGraveyard, enemyGraveyard = 0;
 
     float weightCap = 0;
+    float weightCapEnemy = 0;
     float currentWeight = 0;
 
     // Start is called before the first frame update
@@ -133,77 +134,68 @@ public class BattleSystem : MonoBehaviour
         enemyUnit4 = enemyGO4.GetComponent<Unit>();
 
         weightCap = playerUnit1.weightCap + playerUnit2.weightCap + playerUnit3.weightCap + playerUnit4.weightCap;
-
+        weightCapEnemy = enemyUnit1.weightCap + enemyUnit2.weightCap + enemyUnit3.weightCap + enemyUnit4.weightCap;
+        
         AttackChoice.moveBarSetup(weightCap, currentWeight);
         //add all moves to player and enemy decks
-        
-        for (int i = 0; i < playerUnit1.moveDeck.Length; i++) {
-            partyFullDeck[partyCounter] = playerUnit1.moveDeck[i];
-            partyCounter++;
-        }
-        for (int i = 0; i < playerUnit2.moveDeck.Length; i++) {
-            partyFullDeck[(partyCounter)] = playerUnit2.moveDeck[i]; 
-            partyCounter++;
-        }
-        for (int i = 0; i < playerUnit3.moveDeck.Length; i++) {
-            partyFullDeck[(partyCounter)] = playerUnit3.moveDeck[i];
-            partyCounter++;
-        }
-        for (int i = 0; i < playerUnit4.moveDeck.Length; i++) {
-            partyFullDeck[(partyCounter)] = playerUnit4.moveDeck[i];
-            partyCounter++;
-        }
+        buildPlayerDeck();
+        buildEnemyDeck();
 
-        for (int i = 0; i < enemyUnit1.moveDeck.Length; i++) {
-            enemyFullDeck[enemyCounter] = enemyUnit1.moveDeck[i];
-            enemyCounter++;
-        }
+        dialogueText.text = "Encountered enemies, prepare for battle!";
+        // May change up some more of the code here to get the data to show
+        // may even just have set up 
+        Debug.Log("Right before playerhud set up");
+        battleStatusBar.setHUD(playerUnit1, playerUnit2, playerUnit3, playerUnit4); // refer to the PlayerCharStatusBar
+        playerHUD.setHUD(playerUnit1, playerUnit2, playerUnit3, playerUnit4); // refer to the PlayerCharStatusBar
+        enemyHUD.setHUD(enemyUnit1, enemyUnit2, enemyUnit3, enemyUnit4); // refer to the EnemyStatus Bar
 
-        for (int i = 0; i < enemyUnit2.moveDeck.Length; i++)
-        {
-            enemyFullDeck[enemyCounter] = enemyUnit2.moveDeck[i];
-            enemyCounter++;
-        }
+        yield return new WaitForSeconds(3f);
 
-        for (int i = 0; i < enemyUnit3.moveDeck.Length; i++)
-        {
-            enemyFullDeck[enemyCounter] = enemyUnit3.moveDeck[i];
-            enemyCounter++;
-        }
+        //Change to Player Phase
+        state = BattleState.PLAYERTURN;
+        PlayerTurn();
+    }
 
-        for (int i = 0; i < enemyUnit4.moveDeck.Length; i++)
-        {
-            enemyFullDeck[enemyCounter] = enemyUnit4.moveDeck[i];
-            enemyCounter++;
-        }
+    public void buildPlayerDeck()
+    {
         partyCounter = 0;
-        enemyCounter = 0;
-         foreach(Move mov in playerUnit1.moveDeck) {
-             partyFullDeck[partyCounter] = mov;
-             partyCounter++;
-             partyDeck.Push(mov);
-         }
-         foreach(Move mov in playerUnit2.moveDeck) {
-             partyFullDeck[partyCounter] = mov;
-             partyCounter++;
-             partyDeck.Push(mov);
-         }
-         foreach(Move mov in playerUnit3.moveDeck) {
-             partyFullDeck[partyCounter] = mov;
-             partyCounter++;
-             partyDeck.Push(mov);
-         }
-         foreach(Move mov in playerUnit4.moveDeck) {
-             partyFullDeck[partyCounter] = mov;
-             partyCounter++;
-             partyDeck.Push(mov);
-         }
+        foreach (Move mov in playerUnit1.moveDeck)
+        {
+            partyFullDeck[partyCounter] = mov;
+            partyCounter++;
+            partyDeck.Push(mov);
+        }
+        foreach (Move mov in playerUnit2.moveDeck)
+        {
+            partyFullDeck[partyCounter] = mov;
+            partyCounter++;
+            partyDeck.Push(mov);
+        }
+        foreach (Move mov in playerUnit3.moveDeck)
+        {
+            partyFullDeck[partyCounter] = mov;
+            partyCounter++;
+            partyDeck.Push(mov);
+        }
+        foreach (Move mov in playerUnit4.moveDeck)
+        {
+            partyFullDeck[partyCounter] = mov;
+            partyCounter++;
+            partyDeck.Push(mov);
+        }
+        //shuffle stacks
+        //partyDeck = partyDeck.OrderBy(x => rnd.Next());
+    }
 
-         foreach(Move mov in enemyUnit1.moveDeck) {
-             enemyFullDeck[enemyCounter] = mov;
-             enemyCounter++;
-             enemyDeck.Push(mov);
-         }
+    public void buildEnemyDeck()
+    {
+        enemyCounter = 0;
+        foreach (Move mov in enemyUnit1.moveDeck)
+        {
+            enemyFullDeck[enemyCounter] = mov;
+            enemyCounter++;
+            enemyDeck.Push(mov);
+        }
         foreach (Move mov in enemyUnit2.moveDeck)
         {
             enemyFullDeck[enemyCounter] = mov;
@@ -222,30 +214,16 @@ public class BattleSystem : MonoBehaviour
             enemyCounter++;
             enemyDeck.Push(mov);
         }
-
         //shuffle stacks
-        //partyDeck = partyDeck.OrderBy(x => rnd.Next());
         //enemyDeck = enemyDeck.OrderBy(x => rnd.Next());
-
-        dialogueText.text = "Encountered enemies, prepare for battle!";
-        // May change up some more of the code here to get the data to show
-        // may even just have set up 
-        Debug.Log("Right before playerhud set up");
-        battleStatusBar.setHUD(playerUnit1, playerUnit2, playerUnit3, playerUnit4); // refer to the PlayerCharStatusBar
-        playerHUD.setHUD(playerUnit1, playerUnit2, playerUnit3, playerUnit4); // refer to the PlayerCharStatusBar
-        enemyHUD.setHUD(enemyUnit1, enemyUnit2, enemyUnit3, enemyUnit4); // refer to the EnemyStatus Bar
-
-        yield return new WaitForSeconds(3f);
-
-        //Change to Player Phase
-        state = BattleState.PLAYERTURN;
-        PlayerTurn();
     }
 
     //move inside code to damageCalc(), this method is just to select moves.
     //for move select, do not allow dead character moves to be selected.
     IEnumerator PlayerAttack()
     {
+        currentWeight = 0;
+        selectIndex = 0;
         //pop first 5 moves off stack into turn array
         for (int i = 0; i < partyTurn.Length; i++) {
             partyTurn[i] = (Move) partyDeck.Pop();
@@ -253,37 +231,48 @@ public class BattleSystem : MonoBehaviour
 
         // Display Moves
         AttackChoice.setMoveDisplay(partyTurn);
-        Debug.Log("AfterMoveDisplay");
-
-        yield return new WaitForSeconds(2f); // Need a return bc it's ienumerator but don't know what to return! -Emily
 
         //check to see if stack is empty - if yes, restock w shuffled array
-        if (partyDeck.Count == 0) {
+        if (partyDeck.Count == 0)
+        {
             Debug.Log("Stack empty, reshuffling!");
-            //restock code here
+            buildPlayerDeck();
         }
-
-        //insert method to select moves here!
-        // ^- This would be the time to allow the user to choose their moves
-
-        //player finishes move selection, move to enemy selection phase
-        Debug.Log("Player move selection finished");
-        
-        //state = BattleState.ENEMYTURN;
-        //StartCoroutine(EnemyTurn());
+        //restock code here
+        yield return new WaitForSeconds(2f); // Need a return bc it's ienumerator, may change 
     }
 
     IEnumerator EnemyTurn()
     {
         BackButtonSwitch(); // Incase the Player went first, switch menus
         dialogueText.text = "Waiting for enemy move selection...";
-
+        currentWeight = 0;
+        selectIndex = 0;
         yield return new WaitForSeconds(3f);
 
-    	//insert enemy move array filling code here, similar to players
+        //pop first 5 moves off stack into turn array
+        for (int i = 0; i < enemyTurn.Length; i++){
+            enemyTurn[i] = (Move)enemyDeck.Pop();
+        }
 
-    	//selection finished, move to damage phase
-    	Debug.Log("Enemy move selection finished");
+        // move through elements and pull their weights, see if they fit in weightCapEnemy
+        for (int i = 0; i < enemyTurn.Length; i++){
+            if( (currentWeight + enemyTurn[i].weight) < weightCapEnemy){
+                currentWeight += enemyTurn[i].weight;
+                enemySelectedMoves[selectIndex] = enemyTurn[i];
+                selectIndex++;
+            }
+        }
+
+        //check to see if stack is empty - if yes, restock w shuffled array
+        if (partyDeck.Count == 0)
+        {
+            Debug.Log("Stack empty, reshuffling!");
+            buildEnemyDeck();
+        }
+
+        //selection finished, move to damage phase
+        Debug.Log("Enemy move selection finished");
     	state = BattleState.DAMAGE;
     	StartCoroutine(damageCalc());
 
@@ -310,59 +299,66 @@ public class BattleSystem : MonoBehaviour
             Debug.Log(enemyMove);
     		Unit attacker, defender;
             Move attackerMove, defenderMove;
-    		if(playerMove.weight < enemyMove.weight) {
+
+            if(playerMove == null && enemyMove == null){ break;}
+
+            if (playerMove.weight < enemyMove.weight) {
     			Debug.Log("Player moves first!");
-    			//assign attacker to corresponding player
-    			if(playerUnit1.unitName == playerMove.moveOwner) {
-    				attacker = playerUnit1;
-    			} else if(playerUnit2.unitName == playerMove.moveOwner) {
-    				attacker = playerUnit2;
-    			} else if(playerUnit3.unitName == playerMove.moveOwner) {
-    				attacker = playerUnit3;
-    			} else {
-    				attacker = playerUnit4;
-    			}
-                attackerMove = playerMove;
+                //assign attacker to corresponding player
+                if(playerMove != null) { 
+                    if (playerUnit1.unitName == playerMove.moveOwner) {
+    				    attacker = playerUnit1;
+    			    } else if(playerUnit2.unitName == playerMove.moveOwner) {
+    				    attacker = playerUnit2;
+    			    } else if(playerUnit3.unitName == playerMove.moveOwner) {
+    				    attacker = playerUnit3;
+    			    } else {
+    				    attacker = playerUnit4;
+    			    }
+                    attackerMove = playerMove;
+                
+                    //assign defender to corresponding enemy
+                    if (enemyUnit1.unitName == enemyMove.moveOwner) {
+    				    defender = enemyUnit1;
+    			    } else if(enemyUnit2.unitName == enemyMove.moveOwner) {
+    				    defender = enemyUnit2;
+    			    } else if(enemyUnit3.unitName == enemyMove.moveOwner) {
+    				    defender = enemyUnit3;
+    			    } else {
+    				    defender = enemyUnit4;
+    			    }
+                    defenderMove = enemyMove;
+                }
+            } else {
+                if (enemyMove != null) { 
+                    Debug.Log("Enemy moves first!");
+    			    //assign attacker to corresponding enemy
+    			    if(enemyUnit1.unitName == enemyMove.moveOwner) {
+    				    attacker = enemyUnit1;
+    			    } else if(enemyUnit2.unitName == enemyMove.moveOwner) {
+    				    attacker = enemyUnit2;
+    			    } else if(enemyUnit3.unitName == enemyMove.moveOwner) {
+    				    attacker = enemyUnit3;
+    			    } else {
+    				    attacker = enemyUnit4;
+    			    }
+                    attackerMove = enemyMove;
 
-    			//assign defender to corresponding enemy
-    			if(enemyUnit1.unitName == enemyMove.moveOwner) {
-    				defender = enemyUnit1;
-    			} else if(enemyUnit2.unitName == enemyMove.moveOwner) {
-    				defender = enemyUnit2;
-    			} else if(enemyUnit3.unitName == enemyMove.moveOwner) {
-    				defender = enemyUnit3;
-    			} else {
-    				defender = enemyUnit4;
-    			}
-                defenderMove = enemyMove;
-    		} else {
-    			Debug.Log("Enemy moves first!");
-    			//assign attacker to corresponding enemy
-    			if(enemyUnit1.unitName == enemyMove.moveOwner) {
-    				attacker = enemyUnit1;
-    			} else if(enemyUnit2.unitName == enemyMove.moveOwner) {
-    				attacker = enemyUnit2;
-    			} else if(enemyUnit3.unitName == enemyMove.moveOwner) {
-    				attacker = enemyUnit3;
-    			} else {
-    				attacker = enemyUnit4;
-    			}
-                attackerMove = enemyMove;
-
-    			//assign defender to corresponding player
-    			if(playerUnit1.unitName == playerMove.moveOwner) {
-    				defender = playerUnit1;
-    			} else if(playerUnit2.unitName == playerMove.moveOwner) {
-    				defender = playerUnit2;
-    			} else if(playerUnit3.unitName == playerMove.moveOwner) {
-    				defender = playerUnit3;
-    			} else {
-    				defender = playerUnit4;
-    			}
-                defenderMove = playerMove;
-    		}
-    		//if attacker is dead, don't calc damage
-    		if(attacker.currentHP <= 0) {
+    			    //assign defender to corresponding player
+    			    if(playerUnit1.unitName == playerMove.moveOwner) {
+    				    defender = playerUnit1;
+    			    } else if(playerUnit2.unitName == playerMove.moveOwner) {
+    				    defender = playerUnit2;
+    			    } else if(playerUnit3.unitName == playerMove.moveOwner) {
+    				    defender = playerUnit3;
+    			    } else {
+    				    defender = playerUnit4;
+    			    }
+                    defenderMove = playerMove;
+    		    }
+            }
+            //if attacker is dead, don't calc damage
+            if (attacker.currentHP <= 0) {
     			dialogueText.text = attacker + "is incapacitated.";
     		} else {
                 //set move damage to base move power
@@ -378,7 +374,7 @@ public class BattleSystem : MonoBehaviour
 				}
 
 				//actual damage calculation for attacker
-		   		int damage = (int)((attacker.power * advantage + moveDamage) - defender.defense);
+		   		int damage = (int)( ((attacker.power * advantage + moveDamage) - defender.defense)/ attackerMove.hitCount);
 
 		        //if damage is negative, set to 0 (no damage taken)
 		        if (damage < 0) {
@@ -471,11 +467,9 @@ public class BattleSystem : MonoBehaviour
 			state = BattleState.WON;
         	EndBattle();
 		}
-
 		//if both parties aren't dead, continue back to player turn
 		state = BattleState.PLAYERTURN;
 		PlayerTurn();
-
     }
 
     void EndBattle()
@@ -504,6 +498,7 @@ public class BattleSystem : MonoBehaviour
         if (state != BattleState.PLAYERTURN) {
             return;
         } else {
+            Debug.Log("Player move selection finished");
             StartCoroutine(EnemyTurn());
         }
     }
@@ -525,7 +520,6 @@ public class BattleSystem : MonoBehaviour
     public void AttackSelect(Button button)
     {
         //calculate current weight of chosen moves
-        
         for(int i=0; i<selectIndex; i++)
         {
             currentWeight = currentWeight + partySelectedMoves[i].weight;
