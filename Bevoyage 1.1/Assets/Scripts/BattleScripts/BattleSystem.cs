@@ -274,11 +274,11 @@ public class BattleSystem : MonoBehaviour
         //selection finished, move to damage phase
         Debug.Log("Enemy move selection finished");
     	state = BattleState.DAMAGE;
-    	StartCoroutine(damageCalc());
+    	StartCoroutine(execOrder());
 
     }
 
-    IEnumerator damageCalc() {
+    IEnumerator execOrder() {
     	Debug.Log("Made it to damage phase");
         BackButtonSwitch(); // Switch menus to see the field
 
@@ -288,19 +288,14 @@ public class BattleSystem : MonoBehaviour
     	 * we need a medic
     	 */
         for (int i = 0; i < 5; i++) {
-    		double advantage = 1.0;
-    		double moveDamage = 0;
-    		float critCheck;
-    		bool isDead;
 
     		Move playerMove = partySelectedMoves[i];
     		Move enemyMove = enemySelectedMoves[i];
             Debug.Log(playerMove);
             Debug.Log(enemyMove);
     		Unit attacker, defender;
-            Move attackerMove, defenderMove;
 
-            if(playerMove == null && enemyMove == null){ break;}
+            if(playerMove == null && enemyMove == null){break;}
 
             if (playerMove.weight < enemyMove.weight) {
     			Debug.Log("Player moves first!");
@@ -315,8 +310,7 @@ public class BattleSystem : MonoBehaviour
     			    } else {
     				    attacker = playerUnit4;
     			    }
-                    attackerMove = playerMove;
-                
+
                     //assign defender to corresponding enemy
                     if (enemyUnit1.unitName == enemyMove.moveOwner) {
     				    defender = enemyUnit1;
@@ -327,7 +321,14 @@ public class BattleSystem : MonoBehaviour
     			    } else {
     				    defender = enemyUnit4;
     			    }
-                    defenderMove = enemyMove;
+
+                    //do damage
+                    damageCalc(attacker, defender, playerMove);
+                    damageCalc(defender, attacker, enemyMove);
+
+                    //adjust HUDs
+                    playerHUD.SetHP(attacker.currentHP, attacker.unitName);
+                    enemyHUD.SetHP(defender.currentHP, defender.unitName);
                 }
             } else {
                 if (enemyMove != null) { 
@@ -342,7 +343,6 @@ public class BattleSystem : MonoBehaviour
     			    } else {
     				    attacker = enemyUnit4;
     			    }
-                    attackerMove = enemyMove;
 
     			    //assign defender to corresponding player
     			    if(playerUnit1.unitName == playerMove.moveOwner) {
@@ -354,108 +354,16 @@ public class BattleSystem : MonoBehaviour
     			    } else {
     				    defender = playerUnit4;
     			    }
-                    defenderMove = playerMove;
+
+                    //do damage
+                    damageCalc(attacker, defender, enemyMove);
+                    damageCalc(defender, attacker, playerMove);
+
+                    //adjust HUDs
+                    enemyHUD.SetHP(attacker.currentHP, attacker.unitName);
+                    playerHUD.SetHP(defender.currentHP, defender.unitName);
     		    }
             }
-            //if attacker is dead, don't calc damage
-            if (attacker.currentHP <= 0) {
-    			dialogueText.text = attacker + "is incapacitated.";
-    		} else {
-                //set move damage to base move power
-                moveDamage = attackerMove.power;
-
-    			//check to see if unit has attribute advantage
-                advantage = attackerMove.isEffective(defender.attribute);
-
-		    	//check to see if critical hit lands for attacker
-				critCheck = Random.Range(1,101);
-				if(critCheck > (100 - attacker.critRate)) {
-					moveDamage += moveDamage * 1.5d; // convert to double
-				}
-
-				//actual damage calculation for attacker
-		   		int damage = (int)( ((attacker.power * advantage + moveDamage) - defender.defense)/ attackerMove.hitCount);
-
-		        //if damage is negative, set to 0 (no damage taken)
-		        if (damage < 0) {
-		            damage = 0;
-		        }
-
-		        //apply damage
-		        isDead = defender.TakeDamage(damage);
-		        if (damage == 0) {
-		        	Debug.Log("No damage taken!");
-		        }
-		        if(playerMove.weight < enemyMove.weight) {
-		        	enemyHUD.SetHP(defender.currentHP, defender.unitName);
-	        	} else {
-	        		playerHUD.SetHP(defender.currentHP, defender.unitName);
-	        	}
-
-	        	dialogueText.text = attacker.unitName + "attacks " + defender.unitName + "for " + damage + "!";
-
-	        	yield return new WaitForSeconds(2f);
-
-	        	//if dead, add to respective graveyard
-	        	if(isDead) {
-	        		dialogueText.text = defender.unitName + "is defeated!";
-	        		if(defender.type == 'p') {
-	        			partyGraveyard++;
-	        		} else {
-	        			enemyGraveyard++;
-	        		}
-	        	}
-    		}
-
-    		//defender's turn, same rules as attacker
-    		if(attacker.currentHP == 0) {
-                dialogueText.text = defender.unitName + "is incapacitated.";
-    		} else {
-    			//set move damage to base move power
-                moveDamage = defenderMove.power;
-
-                //check to see if unit has attribute advantage
-                advantage = defenderMove.isEffective(attacker.attribute);
-
-                //check to see if critical hit lands for defender
-                critCheck = Random.Range(1,101);
-                if(critCheck > (100 - defender.critRate)) {
-                    moveDamage += moveDamage * 1.5d; // convert to double
-                }
-
-                //actual damage calculation for defender
-                int damage = (int)((defender.power * advantage + moveDamage) - attacker.defense);
-
-		        //if damage is negative, set to 0 (no damage taken)
-		        if (damage < 0) {
-		            damage = 0;
-		        }
-
-		        //apply damage
-		        isDead = attacker.TakeDamage(damage);
-		        if (damage == 0) {
-		        	Debug.Log("No damage taken!");
-		        }
-		        if(playerMove.weight < enemyMove.weight) {
-		        	playerHUD.SetHP(attacker.currentHP, attacker.unitName);
-	        	} else {
-	        		enemyHUD.SetHP(attacker.currentHP, attacker.unitName);
-	        	}
-
-	        	dialogueText.text = defender.unitName + "attacks " + attacker.unitName + "for " + damage + "!";
-
-	        	yield return new WaitForSeconds(2f);
-
-	        	//if dead, add to respective graveyard
-	        	if(isDead) {
-	        		dialogueText.text = attacker.unitName + "is defeated!";
-	        		if(attacker.type == 'p') {
-	        			partyGraveyard++;
-	        		} else {
-	        			enemyGraveyard++;
-	        		}
-	        	}
-    		}
     	}
     	//check both parties to see if all are incapacitated, if so determine win/loss
 		if(partyGraveyard == 4) {
@@ -470,6 +378,7 @@ public class BattleSystem : MonoBehaviour
 		//if both parties aren't dead, continue back to player turn
 		state = BattleState.PLAYERTURN;
 		PlayerTurn();
+        yield return new WaitForSeconds(3f);
     }
 
     void EndBattle()
@@ -514,6 +423,58 @@ public class BattleSystem : MonoBehaviour
             AttackChoice.moveBarSet(currentWeight + chosenMove.weight);
             button.interactable = false;
             selectIndex++;
+        }
+    }
+
+    public void damageCalc(Unit attacker, Unit defender, Move attackerMove) {
+        double advantage = 1.0;
+        double moveDamage = 0;
+        float critCheck;
+        bool isDead;
+        int damage;
+        //if attacker is dead, don't calc damage
+        if (attacker.currentHP <= 0) {
+            dialogueText.text = attacker + "is incapacitated.";
+        } else {
+            //set move damage to base move power
+            moveDamage = attackerMove.power;
+
+            //check to see if unit has attribute advantage
+            advantage = attackerMove.isEffective(defender.attribute);
+
+            //check to see if critical hit lands for attacker
+            critCheck = Random.Range(1,101);
+            if(critCheck > (100 - attacker.critRate)) {
+                moveDamage += moveDamage * 1.5d; // convert to double
+            }
+
+            //actual damage calculation for attacker
+            damage = (int)(((attacker.power * advantage + moveDamage) - defender.defense)/attackerMove.hitCount);
+
+            //if damage is negative, set to 0 (no damage taken)
+            if (damage < 0) {
+                damage = 0;
+            }    
+
+            //apply damage
+            isDead = defender.TakeDamage(damage);
+            if (damage == 0) {
+                Debug.Log("No damage taken!");
+            }
+            // if(playerMove.weight < enemyMove.weight) {
+            //     enemyHUD.SetHP(defender.currentHP, defender.unitName);
+            // } else {
+            //     playerHUD.SetHP(defender.currentHP, defender.unitName);
+            // }
+            dialogueText.text = attacker.unitName + " attacks " + defender.unitName + " for " + damage + "!";
+            if(isDead) {
+                dialogueText.text = defender.unitName + "is defeated!";
+                if(defender.type == 'p') {
+                    partyGraveyard++;
+                } else {
+                    enemyGraveyard++;
+                }
+            }
         }
     }
 
