@@ -71,7 +71,9 @@ public class BattleSystem : MonoBehaviour
     private Move[] partySelectedMoves = new Move[5]; //holds the cards that are selected
     int selectIndex = 0; // show how many cards are chosen
 
-    int partyCounter, enemyCounter, partyGraveyard, enemyGraveyard = 0;
+    int partyCounter, enemyCounter = 0;
+    private int[] partyGraveyard = new int[4]{ 0, 0, 0, 0}; // dead = 1 | alive = 0
+    private int[] enemyGraveyard = new int[4]{ 0, 0, 0, 0};
 
     float weightCap = 0;
     float weightCapEnemy = 0;
@@ -144,7 +146,6 @@ public class BattleSystem : MonoBehaviour
         dialogueText.text = "Encountered enemies, prepare for battle!";
         // May change up some more of the code here to get the data to show
         // may even just have set up 
-        Debug.Log("Right before playerhud set up");
         battleStatusBar.setHUD(playerUnit1, playerUnit2, playerUnit3, playerUnit4); // refer to the PlayerCharStatusBar
         playerHUD.setHUD(playerUnit1, playerUnit2, playerUnit3, playerUnit4); // refer to the PlayerCharStatusBar
         enemyHUD.setHUD(enemyUnit1, enemyUnit2, enemyUnit3, enemyUnit4); // refer to the EnemyStatus Bar
@@ -278,7 +279,6 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator execOrder() {
     	Debug.Log("Made it to damage phase");
-       // BackButtonSwitch(); // Switch menus to see the field
 
         //compare lists, execute damage calculation in order, use unit functions
 
@@ -295,7 +295,7 @@ public class BattleSystem : MonoBehaviour
 
             if(playerMove == null && enemyMove == null){break;}
 
-            if (playerMove.weight < enemyMove.weight) {
+            if (enemyMove == null || playerMove.weight < enemyMove.weight) {
     			Debug.Log("Player moves first!");
                 //assign attacker to corresponding player
                 if(playerMove != null) { 
@@ -309,23 +309,38 @@ public class BattleSystem : MonoBehaviour
     				    attacker = playerUnit4;
     			    }
 
-                    //assign defender to corresponding enemy
-                    if (enemyUnit1.unitName == enemyMove.moveOwner) {
-    				    defender = enemyUnit1;
-    			    } else if(enemyUnit2.unitName == enemyMove.moveOwner) {
-    				    defender = enemyUnit2;
-    			    } else if(enemyUnit3.unitName == enemyMove.moveOwner) {
-    				    defender = enemyUnit3;
-    			    } else {
-    				    defender = enemyUnit4;
-    			    }
-
+                    if (enemyMove == null)
+                    {
+                        int theChosen = Random.Range(0, 4);
+                        while(enemyGraveyard[theChosen] != 0){
+                            theChosen = Random.Range(0, 4);
+                        }
+                        if(theChosen == 0) { defender = enemyUnit1; }
+                        else if(theChosen == 1) { defender = enemyUnit2; }
+                        else if(theChosen == 2) { defender = enemyUnit3; }
+                        else { defender = enemyUnit4; }
+                    }
+                    else { 
+                        //assign defender to corresponding enemy
+                        if (enemyUnit1.unitName == enemyMove.moveOwner) {
+    				        defender = enemyUnit1;
+    			        } else if(enemyUnit2.unitName == enemyMove.moveOwner) {
+    				        defender = enemyUnit2;
+    			        } else if(enemyUnit3.unitName == enemyMove.moveOwner) {
+    				        defender = enemyUnit3;
+    			        } else {
+    				        defender = enemyUnit4;
+    			        }
+                    }
                     //do damage
-                    damageCalc(attacker, defender, playerMove);
-                    yield return new WaitForSeconds(3f);
-                    damageCalc(defender, attacker, enemyMove);
-                    yield return new WaitForSeconds(3f);
-
+                    if(playerMove != null) { 
+                        damageCalc(attacker, defender, playerMove);
+                        yield return new WaitForSeconds(3f);
+                    }
+                    if (enemyMove != null) { 
+                        damageCalc(defender, attacker, enemyMove);
+                        yield return new WaitForSeconds(3f);
+                    }
                     //adjust HUDs
                     playerHUD.SetHP(attacker.currentHP, attacker.unitName);
                     enemyHUD.SetHP(defender.currentHP, defender.unitName);
@@ -344,22 +359,40 @@ public class BattleSystem : MonoBehaviour
     				    attacker = enemyUnit4;
     			    }
 
-    			    //assign defender to corresponding player
-    			    if(playerUnit1.unitName == playerMove.moveOwner) {
-    				    defender = playerUnit1;
-    			    } else if(playerUnit2.unitName == playerMove.moveOwner) {
-    				    defender = playerUnit2;
-    			    } else if(playerUnit3.unitName == playerMove.moveOwner) {
-    				    defender = playerUnit3;
-    			    } else {
-    				    defender = playerUnit4;
-    			    }
 
+                    if (playerMove == null)
+                    {
+                        int theChosen = Random.Range(0, 4);
+                        while (enemyGraveyard[theChosen] != 0)
+                        {
+                            theChosen = Random.Range(0, 4);
+                        }
+                        if (theChosen == 0) { defender = playerUnit1; }
+                        else if (theChosen == 1) { defender = playerUnit2; }
+                        else if (theChosen == 2) { defender = playerUnit3; }
+                        else { defender = playerUnit4; }
+                    }
+                    else { 
+                        //assign defender to corresponding player
+                        if (playerUnit1.unitName == playerMove.moveOwner) {
+    				        defender = playerUnit1;
+    			        } else if(playerUnit2.unitName == playerMove.moveOwner) {
+    				        defender = playerUnit2;
+    			        } else if(playerUnit3.unitName == playerMove.moveOwner) {
+    				        defender = playerUnit3;
+    			        } else {
+    				        defender = playerUnit4;
+    			        }
+                    }
                     //do damage
-                    damageCalc(attacker, defender, enemyMove);
-                    yield return new WaitForSeconds(3f);
-                    damageCalc(defender, attacker, playerMove);
-                    yield return new WaitForSeconds(3f);
+                    if(enemyMove != null) { 
+                        damageCalc(attacker, defender, enemyMove);
+                        yield return new WaitForSeconds(3f);
+                    }
+                    if(playerMove != null) { 
+                        damageCalc(defender, attacker, playerMove);
+                        yield return new WaitForSeconds(3f);
+                    }
                     //adjust HUDs
                     enemyHUD.SetHP(attacker.currentHP, attacker.unitName);
                     playerHUD.SetHP(defender.currentHP, defender.unitName);
@@ -367,16 +400,31 @@ public class BattleSystem : MonoBehaviour
                 }
             }
     	}
-    	//check both parties to see if all are incapacitated, if so determine win/loss
-		if(partyGraveyard == 4) {
+        //check both parties to see if all are incapacitated, if so determine win/loss
+        bool partyDeathFlag = true;
+		for(int i = 0; i< partyGraveyard.Length; i++){
+            if(partyGraveyard[i] == 0){
+                partyDeathFlag = false;
+            }
+        }
+        if(partyDeathFlag == true) {
 			state = BattleState.LOST;
         	EndBattle();
 		}
 
-		if(enemyGraveyard == 4) {
+        bool enemyDeathFlag = true;
+        for (int i = 0; i < enemyGraveyard.Length; i++)
+        {
+            if (enemyGraveyard[i] == 0)
+            {
+                enemyDeathFlag = false;
+            }
+        }
+        if (enemyDeathFlag == true) {
 			state = BattleState.WON;
         	EndBattle();
 		}
+
         yield return new WaitForSeconds(3f);
         //if both parties aren't dead, continue back to player turn
         state = BattleState.PLAYERTURN;
@@ -437,7 +485,6 @@ public class BattleSystem : MonoBehaviour
         float critCheck;
         bool isDead;
         int damage;
-        dialogueText.text =" I Should Be Changing Here!";
         //if attacker is dead, don't calc damage
         if (attacker.currentHP <= 0) {
             dialogueText.text = attacker + " is incapacitated.";
@@ -472,14 +519,45 @@ public class BattleSystem : MonoBehaviour
             // } else {
             //     playerHUD.SetHP(defender.currentHP, defender.unitName);
             // }
-            Debug.Log("Here to print the attack");
             dialogueText.text = attacker.unitName + " attacks " + defender.unitName + " for " + damage + "!";
             if(isDead) {
                 dialogueText.text = defender.unitName + " is defeated!";
                 if(defender.type == 'p') {
-                    partyGraveyard++;
+                    //partyGraveyard++; // Make flag the correct person instead
+                    if(defender.unitName == playerUnit1.unitName)
+                    {
+                        partyGraveyard[0] = 1;
+                    }
+                    else if (defender.unitName == playerUnit2.unitName)
+                    {
+                        partyGraveyard[1] = 1;
+                    }
+                    else if (defender.unitName == playerUnit3.unitName)
+                    {
+                        partyGraveyard[2] = 1;
+                    }
+                    else
+                    {
+                        partyGraveyard[3] = 1;
+                    }
                 } else {
-                    enemyGraveyard++;
+                    //enemyGraveyard++; // Make flag the correct person instead
+                    if (defender.unitName == enemyUnit1.unitName)
+                    {
+                        enemyGraveyard[0] = 1;
+                    }
+                    else if (defender.unitName == enemyUnit2.unitName)
+                    {
+                        enemyGraveyard[1] = 1;
+                    }
+                    else if (defender.unitName == enemyUnit3.unitName)
+                    {
+                        enemyGraveyard[2] = 1;
+                    }
+                    else
+                    {
+                        enemyGraveyard[3] = 1;
+                    }
                 }
             }
         }
@@ -509,7 +587,6 @@ public class BattleSystem : MonoBehaviour
         else{
             CalculateWeight(partyTurn[4], currentWeight, button);
         }
-        Debug.Log("Number of moves selected:" + selectIndex);
     }
 
     public void ResetAttack(){
