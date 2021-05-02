@@ -222,8 +222,6 @@ public class BattleSystem : MonoBehaviour
     //for move select, do not allow dead character moves to be selected.
     IEnumerator PlayerAttack()
     {
-        currentWeight = 0;
-        selectIndex = 0;
         //pop first 5 moves off stack into turn array
         for (int i = 0; i < partyTurn.Length; i++) {
             partyTurn[i] = (Move) partyDeck.Pop();
@@ -280,7 +278,7 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator execOrder() {
     	Debug.Log("Made it to damage phase");
-        BackButtonSwitch(); // Switch menus to see the field
+       // BackButtonSwitch(); // Switch menus to see the field
 
         //compare lists, execute damage calculation in order, use unit functions
 
@@ -324,7 +322,9 @@ public class BattleSystem : MonoBehaviour
 
                     //do damage
                     damageCalc(attacker, defender, playerMove);
+                    yield return new WaitForSeconds(3f);
                     damageCalc(defender, attacker, enemyMove);
+                    yield return new WaitForSeconds(3f);
 
                     //adjust HUDs
                     playerHUD.SetHP(attacker.currentHP, attacker.unitName);
@@ -357,12 +357,14 @@ public class BattleSystem : MonoBehaviour
 
                     //do damage
                     damageCalc(attacker, defender, enemyMove);
+                    yield return new WaitForSeconds(3f);
                     damageCalc(defender, attacker, playerMove);
-
+                    yield return new WaitForSeconds(3f);
                     //adjust HUDs
                     enemyHUD.SetHP(attacker.currentHP, attacker.unitName);
                     playerHUD.SetHP(defender.currentHP, defender.unitName);
-    		    }
+                    battleStatusBar.SetHP(defender.currentHP, defender.unitName);
+                }
             }
     	}
     	//check both parties to see if all are incapacitated, if so determine win/loss
@@ -375,10 +377,11 @@ public class BattleSystem : MonoBehaviour
 			state = BattleState.WON;
         	EndBattle();
 		}
-		//if both parties aren't dead, continue back to player turn
-		state = BattleState.PLAYERTURN;
-		PlayerTurn();
         yield return new WaitForSeconds(3f);
+        //if both parties aren't dead, continue back to player turn
+        state = BattleState.PLAYERTURN;
+		PlayerTurn();
+        
     }
 
     void EndBattle()
@@ -394,6 +397,8 @@ public class BattleSystem : MonoBehaviour
 
     //Method to represent player move selection.
     void PlayerTurn() {
+        currentWeight = 0;
+        selectIndex = 0;
         StartCoroutine(PlayerAttack());
         dialogueText.text = "Choose an action:";
     }
@@ -432,9 +437,10 @@ public class BattleSystem : MonoBehaviour
         float critCheck;
         bool isDead;
         int damage;
+        dialogueText.text =" I Should Be Changing Here!";
         //if attacker is dead, don't calc damage
         if (attacker.currentHP <= 0) {
-            dialogueText.text = attacker + "is incapacitated.";
+            dialogueText.text = attacker + " is incapacitated.";
         } else {
             //set move damage to base move power
             moveDamage = attackerMove.power;
@@ -466,9 +472,10 @@ public class BattleSystem : MonoBehaviour
             // } else {
             //     playerHUD.SetHP(defender.currentHP, defender.unitName);
             // }
+            Debug.Log("Here to print the attack");
             dialogueText.text = attacker.unitName + " attacks " + defender.unitName + " for " + damage + "!";
             if(isDead) {
-                dialogueText.text = defender.unitName + "is defeated!";
+                dialogueText.text = defender.unitName + " is defeated!";
                 if(defender.type == 'p') {
                     partyGraveyard++;
                 } else {
@@ -480,8 +487,9 @@ public class BattleSystem : MonoBehaviour
 
     public void AttackSelect(Button button)
     {
+        currentWeight = 0;
         //calculate current weight of chosen moves
-        for(int i=0; i<selectIndex; i++)
+        for (int i=0; i<selectIndex; i++)
         {
             currentWeight = currentWeight + partySelectedMoves[i].weight;
         }
@@ -498,18 +506,13 @@ public class BattleSystem : MonoBehaviour
         else if (button.name == "MoveChoice4"){
             CalculateWeight(partyTurn[3], currentWeight, button);
         }
-        else
-        {
+        else{
             CalculateWeight(partyTurn[4], currentWeight, button);
         }
-
-        Debug.Log("Attack Selected " + button.name);
         Debug.Log("Number of moves selected:" + selectIndex);
-
     }
 
-    public void ResetAttack()
-    {
+    public void ResetAttack(){
         moveSlot1.interactable = true;
         moveSlot2.interactable = true;
         moveSlot3.interactable = true;
