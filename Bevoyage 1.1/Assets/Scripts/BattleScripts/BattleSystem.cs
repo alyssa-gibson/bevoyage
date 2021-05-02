@@ -75,6 +75,7 @@ public class BattleSystem : MonoBehaviour
     int partyCounter, enemyCounter, partyGraveyard, enemyGraveyard = 0;
 
     float weightCap = 0;
+    float currentWeight = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -109,7 +110,6 @@ public class BattleSystem : MonoBehaviour
     }
 
     IEnumerator SetUpBattle(){ 
-        Debug.Log("In SetUpBattle");
         //Activate menus
         BattleUI.SetActive(true);
         AttackUI.SetActive(false);
@@ -135,6 +135,7 @@ public class BattleSystem : MonoBehaviour
 
         weightCap = playerUnit1.weightCap + playerUnit2.weightCap + playerUnit3.weightCap + playerUnit4.weightCap;
 
+        AttackChoice.moveBarSetup(weightCap, currentWeight);
         //add all moves to player and enemy decks
         
         for (int i = 0; i < playerUnit1.moveDeck.Length; i++) {
@@ -202,25 +203,25 @@ public class BattleSystem : MonoBehaviour
          foreach(Move mov in enemyUnit1.moveDeck) {
              enemyFullDeck[enemyCounter] = mov;
              enemyCounter++;
-             partyDeck.Push(mov);
+             enemyDeck.Push(mov);
          }
         foreach (Move mov in enemyUnit2.moveDeck)
         {
             enemyFullDeck[enemyCounter] = mov;
             enemyCounter++;
-            partyDeck.Push(mov);
+            enemyDeck.Push(mov);
         }
         foreach (Move mov in enemyUnit3.moveDeck)
         {
             enemyFullDeck[enemyCounter] = mov;
             enemyCounter++;
-            partyDeck.Push(mov);
+            enemyDeck.Push(mov);
         }
         foreach (Move mov in enemyUnit4.moveDeck)
         {
             enemyFullDeck[enemyCounter] = mov;
             enemyCounter++;
-            partyDeck.Push(mov);
+            enemyDeck.Push(mov);
         }
 
         //shuffle stacks
@@ -251,11 +252,11 @@ public class BattleSystem : MonoBehaviour
             partyTurn[i] = (Move) partyDeck.Pop();
         }
 
-        yield return new WaitForSeconds(3f); // Need a return bc it's ienumerator but don't know what to return! -Emily
-
         // Display Moves
         AttackChoice.setMoveDisplay(partyTurn);
         Debug.Log("AfterMoveDisplay");
+
+        yield return new WaitForSeconds(3f); // Need a return bc it's ienumerator but don't know what to return! -Emily
 
         //check to see if stack is empty - if yes, restock w shuffled array
         if (partyDeck.Count == 0) {
@@ -268,14 +269,15 @@ public class BattleSystem : MonoBehaviour
 
         //player finishes move selection, move to enemy selection phase
         Debug.Log("Player move selection finished");
-        state = BattleState.ENEMYTURN;
-        StartCoroutine(EnemyTurn());
+        
+        //state = BattleState.ENEMYTURN;
+        //StartCoroutine(EnemyTurn());
     }
 
     IEnumerator EnemyTurn()
     {
-        dialogueText.text = "Waiting for enemy move selection...";
         BackButtonSwitch(); // Incase the Player went first, switch menus
+        dialogueText.text = "Waiting for enemy move selection...";
 
         yield return new WaitForSeconds(3f);
 
@@ -305,6 +307,8 @@ public class BattleSystem : MonoBehaviour
 
     		Move playerMove = partyTurnList[i];
     		Move enemyMove = enemyTurnList[i];
+            Debug.Log(playerMove);
+            Debug.Log(enemyMove);
     		Unit attacker, defender;
     		if(playerMove.weight < enemyMove.weight) {
     			Debug.Log("Player moves first!");
@@ -475,67 +479,63 @@ public class BattleSystem : MonoBehaviour
 
     //Method to represent player move selection.
     void PlayerTurn() {
+        StartCoroutine(PlayerAttack());
         dialogueText.text = "Choose an action:";
     }
 
     public void OnAttackButton() {
+        moveSlot1.interactable = true;
+        moveSlot2.interactable = true;
+        moveSlot3.interactable = true;
+        moveSlot4.interactable = true;
+        moveSlot5.interactable = true;
         if (state != BattleState.PLAYERTURN) {
             return;
         } else {
-            StartCoroutine(PlayerAttack());
+            StartCoroutine(EnemyTurn());
         }
     }
 
-    public bool CalculateWeight(Move chosenMove, float currentWeight)
+    public void CalculateWeight(Move chosenMove, float currentWeight, Button button)
     {
         if (currentWeight + chosenMove.weight > weightCap)
         {
             Debug.Log("Cannot Select!");
-            return false;
-            }
-        else { return true; }
+        }
+        else {
+            selectedMoves[selectIndex] = chosenMove;
+            AttackChoice.moveBarSet(currentWeight + chosenMove.weight);
+            button.interactable = false;
+            selectIndex++;
+        }
     }
 
     public void AttackSelect(Button button)
     {
         //calculate current weight of chosen moves
-        float currentWeight = 0;
+        
         for(int i=0; i<selectIndex; i++)
         {
             currentWeight = currentWeight + selectedMoves[i].weight;
         }
         // check which move it was and see if it will fit the weightcap 
         if (button.name == "MoveChoice1") {
-            if(CalculateWeight(partyTurn[0], currentWeight)){
-                selectedMoves[selectIndex] = partyTurn[0];
-            }
+            CalculateWeight(partyTurn[0], currentWeight, button);
         }
         else if (button.name == "MoveChoice2"){
-            if (CalculateWeight(partyTurn[1], currentWeight)) {
-                selectedMoves[selectIndex] = partyTurn[1];
-            }
+            CalculateWeight(partyTurn[1], currentWeight, button);
         }
         else if (button.name == "MoveChoice3"){
-            if (CalculateWeight(partyTurn[2], currentWeight)) {
-                selectedMoves[selectIndex] = partyTurn[2];
-            }
+            CalculateWeight(partyTurn[2], currentWeight, button);
         }
         else if (button.name == "MoveChoice4"){
-            if (CalculateWeight(partyTurn[3], currentWeight))
-            {
-                selectedMoves[selectIndex] = partyTurn[3];
-            }
+            CalculateWeight(partyTurn[3], currentWeight, button);
         }
         else
         {
-            if (CalculateWeight(partyTurn[4], currentWeight))
-            {
-                selectedMoves[selectIndex] = partyTurn[4];
-            }
+            CalculateWeight(partyTurn[4], currentWeight, button);
         }
 
-        button.interactable = false;
-        selectIndex++;
         Debug.Log("Attack Selected " + button.name);
         Debug.Log("Number of moves selected:" + selectIndex);
 
@@ -548,9 +548,11 @@ public class BattleSystem : MonoBehaviour
         moveSlot3.interactable = true;
         moveSlot4.interactable = true;
         moveSlot5.interactable = true;
+        AttackChoice.moveBarSet(0);
+        currentWeight = 0;
         Debug.Log("Reset Clicked");
-        //selectedMoves.clear()
-        //selectedMoves = new Moves[5]
+        //selectedMoves.clear();
+        selectedMoves = new Move[5];
         selectIndex = 0;
     }
 }

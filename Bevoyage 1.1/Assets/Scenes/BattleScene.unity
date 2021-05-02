@@ -1138,6 +1138,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &896752038 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4887482629651975149, guid: c410a20fca2a614479c39852070f1dd6, type: 3}
+  m_PrefabInstance: {fileID: 947059081}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &946221999 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7567425284292899509, guid: c410a20fca2a614479c39852070f1dd6, type: 3}
@@ -3775,6 +3786,7 @@ MonoBehaviour:
   owner3: {fileID: 1573855485}
   owner4: {fileID: 1540504093}
   owner5: {fileID: 1393277528}
+  moveSlider: {fileID: 896752038}
 --- !u!1 &1685490988
 GameObject:
   m_ObjectHideFlags: 0
