@@ -23,8 +23,11 @@ public class MoveDisplay : MonoBehaviour
     public Text owner4;
     public Text owner5;
 
+    public Slider moveSlider;
+
     public void setMoveDisplay(Move[] moveArray)
     {
+        Debug.Log("In set move display");
         moveName1.text = moveArray[0].moveName;
         moveName2.text = moveArray[1].moveName;
         moveName3.text = moveArray[2].moveName;
@@ -43,5 +46,16 @@ public class MoveDisplay : MonoBehaviour
         owner4.text = moveArray[3].moveOwner;
         owner5.text = moveArray[4].moveOwner;
 
+    }
+
+    public void moveBarSetup(float weightCap, float currentWeight)
+    {
+        moveSlider.maxValue = weightCap;
+        moveSlider.value = currentWeight;
+    }
+
+    public void moveBarSet(float currentWeight)
+    {
+        moveSlider.value = currentWeight;
     }
 }

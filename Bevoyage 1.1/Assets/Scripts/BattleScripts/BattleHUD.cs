@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-//using Assets;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -33,7 +32,7 @@ public class BattleHUD : MonoBehaviour
     public Slider char4Slider;
    
     public void setHUD(Unit unit1, Unit unit2, Unit unit3, Unit unit4) {
-        Debug.Log("Now Setting Up The Hud");
+        
         charName1.text = unit1.unitName;
         //char1Lvl.text = unit1.unitLevel.ToString("R");
         char1Slider.maxValue = unit1.maxHP;
@@ -78,4 +77,5 @@ public class BattleHUD : MonoBehaviour
         }
 
     }
+
 }
