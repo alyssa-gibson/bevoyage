@@ -105,7 +105,7 @@ MonoBehaviour:
   defense: 40
   maxHP: 1000
   currentHP: 1000
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 7e31d3cc45574504a964a0d50e5ca2a1, type: 3}
   moveDeck:
   - {fileID: 6349574148628994000, guid: af76975ba3a7abc4380d9a15168fea0c, type: 3}
   - {fileID: 4158098504975558347, guid: 2a969444fa5a8be44b80b8110f5d2bf8, type: 3}

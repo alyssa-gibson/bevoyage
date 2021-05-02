@@ -31,23 +31,7 @@ public class BattleHUD : MonoBehaviour
     //public Text char4Lvl;
     public GameObject char4Image;
     public Slider char4Slider;
-    /*
-    public Text enemyName1;
-    public Text enemy1Lvl;
-    public Slider enemy1Slider;
-
-    public Text enemyName2;
-    public Text enemy2Lvl;
-    public Slider enemy2Slider;
-
-    public Text enemyName3;
-    public Text enemy3Lvl;
-    public Slider enemy3Slider;
-
-    public Text enemyName4;
-    public Text enemy4Lvl;
-    public Slider enemy4Slider;
-    */
+   
     public void setHUD(Unit unit1, Unit unit2, Unit unit3, Unit unit4) {
         Debug.Log("Now Setting Up The Hud");
         charName1.text = unit1.unitName;

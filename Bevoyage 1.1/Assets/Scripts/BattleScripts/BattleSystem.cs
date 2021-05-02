@@ -52,17 +52,24 @@ public class BattleSystem : MonoBehaviour
     public GameObject BattleUI;
     public GameObject AttackUI;
 
+    public MoveDisplay AttackChoice;
+
+    public BattleHUD battleStatusBar;
     public BattleHUD playerHUD;
     public BattleHUD enemyHUD;
 
     public Text dialogueText;
 
-    Stack partyDeck, enemyDeck = new Stack(); //for card selection
-    public Move[] partyFullDeck, enemyFullDeck = new Move[20];
-    public Move[] partyTurn, enemyTurn = new Move[5]; //holds the cards for a specific turn
+    Stack partyDeck = new Stack(); //for card selection
+    Stack enemyDeck = new Stack();
+    private Move[] partyFullDeck = new Move[20];
+    private Move[] enemyFullDeck = new Move[20];
+    private Move[] partyTurn = new Move[5]; //holds the cards for a specific turn
+    private Move[] enemyTurn = new Move[5];
     //public LinkedList <Move> partyTurnList, enemyTurnList = new LinkedList <Move>(); //code's borked
-    public Move[] partyTurnList, enemyTurnList = new Move[5];
-    public Move[] selectedMoves = new Move[5]; //holds the cards that are selected
+    private Move[] partyTurnList = new Move[5];
+    private Move[] enemyTurnList = new Move[5];
+    private Move[] selectedMoves = new Move[5]; //holds the cards that are selected
     int selectIndex = 0; // show how many cards are chosen
 
     int partyCounter, enemyCounter, partyGraveyard, enemyGraveyard = 0;
@@ -76,7 +83,7 @@ public class BattleSystem : MonoBehaviour
         if (scene.name == "BattleScene")
         {
             state = BattleState.START;
-            StartCoroutine(SetUpBattle());
+            StartCoroutine(SetUpBattle()); 
             Debug.Log("Made it to BattleSystem Start()");
         }
     }
@@ -101,7 +108,7 @@ public class BattleSystem : MonoBehaviour
         SceneManager.LoadScene("OverworldMap");
     }
 
-    IEnumerator SetUpBattle() {
+    IEnumerator SetUpBattle(){ 
         Debug.Log("In SetUpBattle");
         //Activate menus
         BattleUI.SetActive(true);
@@ -126,24 +133,24 @@ public class BattleSystem : MonoBehaviour
         GameObject enemyGO4 = Instantiate(enemyPrefab4, enemyStation4);
         enemyUnit4 = enemyGO4.GetComponent<Unit>();
 
-        weightCap = weightCap = playerUnit1.weightCap + playerUnit2.weightCap + playerUnit3.weightCap + playerUnit4.weightCap;
+        weightCap = playerUnit1.weightCap + playerUnit2.weightCap + playerUnit3.weightCap + playerUnit4.weightCap;
 
         //add all moves to player and enemy decks
-
+        
         for (int i = 0; i < playerUnit1.moveDeck.Length; i++) {
             partyFullDeck[partyCounter] = playerUnit1.moveDeck[i];
             partyCounter++;
         }
         for (int i = 0; i < playerUnit2.moveDeck.Length; i++) {
-            partyFullDeck[(i+partyCounter)] = playerUnit2.moveDeck[i];
+            partyFullDeck[(partyCounter)] = playerUnit2.moveDeck[i]; 
             partyCounter++;
         }
         for (int i = 0; i < playerUnit3.moveDeck.Length; i++) {
-            partyFullDeck[(i+partyCounter)] = playerUnit3.moveDeck[i];
+            partyFullDeck[(partyCounter)] = playerUnit3.moveDeck[i];
             partyCounter++;
         }
         for (int i = 0; i < playerUnit4.moveDeck.Length; i++) {
-            partyFullDeck[(i+partyCounter)] = playerUnit4.moveDeck[i];
+            partyFullDeck[(partyCounter)] = playerUnit4.moveDeck[i];
             partyCounter++;
         }
 
@@ -169,31 +176,52 @@ public class BattleSystem : MonoBehaviour
             enemyFullDeck[enemyCounter] = enemyUnit4.moveDeck[i];
             enemyCounter++;
         }
-        // foreach(Move mov in playerUnit1.moveDeck) {
-        //     partyFullDeck[partyCounter] = mov;
-        //     partyCounter++;
-        //     //partyDeck.Push(mov);
-        // }
-        // foreach(Move mov in playerUnit2.moveDeck) {
-        //     partyFullDeck[partyCounter] = mov;
-        //     partyCounter++;
-        //     //partyDeck.Push(mov);
-        // }
-        // foreach(Move mov in playerUnit3.moveDeck) {
-        //     partyFullDeck[partyCounter] = mov;
-        //     partyCounter++;
-        //     //partyDeck.Push(mov);
-        // }
-        // foreach(Move mov in playerUnit4.moveDeck) {
-        //     partyFullDeck[partyCounter] = mov;
-        //     partyCounter++;
-        //     //partyDeck.Push(mov);
-        // }
-        // foreach(Move mov in enemyUnit.moveDeck) {
-        //     enemyFullDeck[enemyCounter] = mov;
-        //     enemyCounter++;
-        //     //partyDeck.Push(mov);
-        // }
+        partyCounter = 0;
+        enemyCounter = 0;
+         foreach(Move mov in playerUnit1.moveDeck) {
+             partyFullDeck[partyCounter] = mov;
+             partyCounter++;
+             partyDeck.Push(mov);
+         }
+         foreach(Move mov in playerUnit2.moveDeck) {
+             partyFullDeck[partyCounter] = mov;
+             partyCounter++;
+             partyDeck.Push(mov);
+         }
+         foreach(Move mov in playerUnit3.moveDeck) {
+             partyFullDeck[partyCounter] = mov;
+             partyCounter++;
+             partyDeck.Push(mov);
+         }
+         foreach(Move mov in playerUnit4.moveDeck) {
+             partyFullDeck[partyCounter] = mov;
+             partyCounter++;
+             partyDeck.Push(mov);
+         }
+
+         foreach(Move mov in enemyUnit1.moveDeck) {
+             enemyFullDeck[enemyCounter] = mov;
+             enemyCounter++;
+             partyDeck.Push(mov);
+         }
+        foreach (Move mov in enemyUnit2.moveDeck)
+        {
+            enemyFullDeck[enemyCounter] = mov;
+            enemyCounter++;
+            partyDeck.Push(mov);
+        }
+        foreach (Move mov in enemyUnit3.moveDeck)
+        {
+            enemyFullDeck[enemyCounter] = mov;
+            enemyCounter++;
+            partyDeck.Push(mov);
+        }
+        foreach (Move mov in enemyUnit4.moveDeck)
+        {
+            enemyFullDeck[enemyCounter] = mov;
+            enemyCounter++;
+            partyDeck.Push(mov);
+        }
 
         //shuffle stacks
         //partyDeck = partyDeck.OrderBy(x => rnd.Next());
@@ -203,6 +231,7 @@ public class BattleSystem : MonoBehaviour
         // May change up some more of the code here to get the data to show
         // may even just have set up 
         Debug.Log("Right before playerhud set up");
+        battleStatusBar.setHUD(playerUnit1, playerUnit2, playerUnit3, playerUnit4); // refer to the PlayerCharStatusBar
         playerHUD.setHUD(playerUnit1, playerUnit2, playerUnit3, playerUnit4); // refer to the PlayerCharStatusBar
         enemyHUD.setHUD(enemyUnit1, enemyUnit2, enemyUnit3, enemyUnit4); // refer to the EnemyStatus Bar
 
@@ -224,7 +253,9 @@ public class BattleSystem : MonoBehaviour
 
         yield return new WaitForSeconds(3f); // Need a return bc it's ienumerator but don't know what to return! -Emily
 
-        //insert method to display moves in UI here!
+        // Display Moves
+        AttackChoice.setMoveDisplay(partyTurn);
+        Debug.Log("AfterMoveDisplay");
 
         //check to see if stack is empty - if yes, restock w shuffled array
         if (partyDeck.Count == 0) {
@@ -260,7 +291,6 @@ public class BattleSystem : MonoBehaviour
     IEnumerator damageCalc() {
     	Debug.Log("Made it to damage phase");
         BackButtonSwitch(); // Switch menus to see the field
-        //toggle UI menus back to the main battle menu
 
         //compare lists, execute damage calculation in order, use unit functions
 
@@ -456,67 +486,52 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
+    public bool CalculateWeight(Move chosenMove, float currentWeight)
+    {
+        if (currentWeight + chosenMove.weight > weightCap)
+        {
+            Debug.Log("Cannot Select!");
+            return false;
+            }
+        else { return true; }
+    }
+
     public void AttackSelect(Button button)
     {
         //calculate current weight of chosen moves
-        /*
-        int currentWeight = 0;
+        float currentWeight = 0;
         for(int i=0; i<selectIndex; i++)
         {
             currentWeight = currentWeight + selectedMoves[i].weight;
         }
-        */
         // check which move it was and see if it will fit the weightcap 
         if (button.name == "MoveChoice1") {
-            Debug.Log("In if 1");
-            /*
-            if(currentWeight + partyTurn[0] >= weightCap){
-                Debug.Log("Cannot Select!");
-                break
+            if(CalculateWeight(partyTurn[0], currentWeight)){
+                selectedMoves[selectIndex] = partyTurn[0];
             }
-            */
-            // selectedMoves[selectIndex] = partyTurn[0];
         }
         else if (button.name == "MoveChoice2"){
-            Debug.Log("In if 2");
-            /*
-            if (currentWeight + partyTurn[1] >= weightCap){
-                Debug.Log("Cannot Select!");
-                break
+            if (CalculateWeight(partyTurn[1], currentWeight)) {
+                selectedMoves[selectIndex] = partyTurn[1];
             }
-            */
-            // selectedMoves[selectIndex] = partyTurn[1];
         }
         else if (button.name == "MoveChoice3"){
-            Debug.Log("In if 3");
-            /*
-            if (currentWeight + partyTurn[2] >= weightCap){
-                Debug.Log("Cannot Select!");
-                break
+            if (CalculateWeight(partyTurn[2], currentWeight)) {
+                selectedMoves[selectIndex] = partyTurn[2];
             }
-            */
-            // selectedMoves[selectIndex] = partyTurn[2];
         }
         else if (button.name == "MoveChoice4"){
-            Debug.Log("In if 4");
-            /*
-            if (currentWeight + partyTurn[3] >= weightCap){
-                Debug.Log("Cannot Select!");
-                break
+            if (CalculateWeight(partyTurn[3], currentWeight))
+            {
+                selectedMoves[selectIndex] = partyTurn[3];
             }
-            */
-            // selectedMoves[selectIndex] = partyTurn[3];
         }
         else
         {
-            Debug.Log("In else 5");
-            /*
-            if (currentWeight + partyTurn[4] >= weightCap){
-                Debug.Log("Cannot Select!");
-                break
+            if (CalculateWeight(partyTurn[4], currentWeight))
+            {
+                selectedMoves[selectIndex] = partyTurn[4];
             }
-            */
-            // selectedMoves[selectIndex] = partyTurn[4];
         }
 
         button.interactable = false;
