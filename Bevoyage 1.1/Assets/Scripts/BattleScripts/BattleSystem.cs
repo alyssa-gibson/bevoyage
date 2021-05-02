@@ -66,10 +66,9 @@ public class BattleSystem : MonoBehaviour
     private Move[] enemyFullDeck = new Move[20];
     private Move[] partyTurn = new Move[5]; //holds the cards for a specific turn
     private Move[] enemyTurn = new Move[5];
-    //public LinkedList <Move> partyTurnList, enemyTurnList = new LinkedList <Move>(); //code's borked
-    private Move[] partyTurnList = new Move[5];
-    private Move[] enemyTurnList = new Move[5];
-    private Move[] selectedMoves = new Move[5]; //holds the cards that are selected
+    //public LinkedList <Move> partySelectedMoves, enemySelectedMoves = new LinkedList <Move>(); //code's borked
+    private Move[] enemySelectedMoves = new Move[5];
+    private Move[] partySelectedMoves = new Move[5]; //holds the cards that are selected
     int selectIndex = 0; // show how many cards are chosen
 
     int partyCounter, enemyCounter, partyGraveyard, enemyGraveyard = 0;
@@ -305,8 +304,8 @@ public class BattleSystem : MonoBehaviour
     		float critCheck;
     		bool isDead;
 
-    		Move playerMove = partyTurnList[i];
-    		Move enemyMove = enemyTurnList[i];
+    		Move playerMove = partySelectedMoves[i];
+    		Move enemyMove = enemySelectedMoves[i];
             Debug.Log(playerMove);
             Debug.Log(enemyMove);
     		Unit attacker, defender;
@@ -503,7 +502,7 @@ public class BattleSystem : MonoBehaviour
             Debug.Log("Cannot Select!");
         }
         else {
-            selectedMoves[selectIndex] = chosenMove;
+            partySelectedMoves[selectIndex] = chosenMove;
             AttackChoice.moveBarSet(currentWeight + chosenMove.weight);
             button.interactable = false;
             selectIndex++;
@@ -516,7 +515,7 @@ public class BattleSystem : MonoBehaviour
         
         for(int i=0; i<selectIndex; i++)
         {
-            currentWeight = currentWeight + selectedMoves[i].weight;
+            currentWeight = currentWeight + partySelectedMoves[i].weight;
         }
         // check which move it was and see if it will fit the weightcap 
         if (button.name == "MoveChoice1") {
@@ -551,8 +550,7 @@ public class BattleSystem : MonoBehaviour
         AttackChoice.moveBarSet(0);
         currentWeight = 0;
         Debug.Log("Reset Clicked");
-        //selectedMoves.clear();
-        selectedMoves = new Move[5];
+        partySelectedMoves = new Move[5];
         selectIndex = 0;
     }
 }
