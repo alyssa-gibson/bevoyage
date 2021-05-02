@@ -7,6 +7,7 @@ public class Move : MonoBehaviour
     //For all moves
     public string moveName;
     public string attribute;
+    public string moveType; // i.e.: attack move, support, etc
     public int weight; //minimum: 1, max: 5
     public string moveOwner; //for attack animations
     public int moveID; //for database
@@ -19,12 +20,56 @@ public class Move : MonoBehaviour
     //For healing moves
     public float healAmt;
 
-    //Method that checks attribute effectiveness. Returns a float for damage modifier.
-    // public float isEffective(string unitAttribute) {
-    // 	float modifier = 1;
-    // 	if( /*find a more effective way to compare strings jfc*/ ) {
-    // 		modifier = 1.5;
-    // 	}
-    // 	return modifier;
-    // } 
+    //Method that checks attribute effectiveness. Returns a double for damage modifier.
+    public double isEffective(string unitAttribute) {
+    	double modifier = 1;
+    	switch(attribute) {
+    		case "sweet":
+    			if (unitAttribute == "spiced") {
+    				modifier = 1.5;
+    			}
+    			if (unitAttribute == "bitter") {
+    				modifier = 0.5;
+    			}
+    			break;
+    		case "sour":
+	    		if (unitAttribute == "bitter") {
+    				modifier = 1.5;
+    			}
+    			if (unitAttribute == "smoky") {
+    				modifier = 0.5;
+    			}
+    			break;
+    		case "bitter":
+    			if (unitAttribute == "sweet") {
+    				modifier = 1.5;
+    			}
+    			if (unitAttribute == "sour") {
+    				modifier = 0.5;
+    			}
+    			break;
+    		case "spiced":
+    			if (unitAttribute == "smoky") {
+    				modifier = 1.5;
+    			}
+    			if (unitAttribute == "sweet") {
+    				modifier = 0.5;
+    			}
+    			break;
+    		case "smoky":
+    			if (unitAttribute == "sour") {
+    				modifier = 1.5;
+    			}
+    			if (unitAttribute == "spiced") {
+    				modifier = 0.5;
+    			}
+    			break;
+    		case "neutral":
+    			if (unitAttribute == "stale") {
+    				modifier = 1.5;
+    			}
+    			break;
+    	}
+    	return modifier;
+    }
 }

@@ -255,7 +255,7 @@ public class BattleSystem : MonoBehaviour
         AttackChoice.setMoveDisplay(partyTurn);
         Debug.Log("AfterMoveDisplay");
 
-        yield return new WaitForSeconds(3f); // Need a return bc it's ienumerator but don't know what to return! -Emily
+        yield return new WaitForSeconds(2f); // Need a return bc it's ienumerator but don't know what to return! -Emily
 
         //check to see if stack is empty - if yes, restock w shuffled array
         if (partyDeck.Count == 0) {
@@ -296,11 +296,11 @@ public class BattleSystem : MonoBehaviour
         //compare lists, execute damage calculation in order, use unit functions
 
         /* TO DO:
-    	 * 
+    	 * we need a medic
     	 */
         for (int i = 0; i < 5; i++) {
-    		float advantage = 1;
-    		float critDamage = 0;
+    		double advantage = 1.0;
+    		double moveDamage = 0;
     		float critCheck;
     		bool isDead;
 
@@ -309,6 +309,7 @@ public class BattleSystem : MonoBehaviour
             Debug.Log(playerMove);
             Debug.Log(enemyMove);
     		Unit attacker, defender;
+            Move attackerMove, defenderMove;
     		if(playerMove.weight < enemyMove.weight) {
     			Debug.Log("Player moves first!");
     			//assign attacker to corresponding player
@@ -321,6 +322,7 @@ public class BattleSystem : MonoBehaviour
     			} else {
     				attacker = playerUnit4;
     			}
+                attackerMove = playerMove;
 
     			//assign defender to corresponding enemy
     			if(enemyUnit1.unitName == enemyMove.moveOwner) {
@@ -332,6 +334,7 @@ public class BattleSystem : MonoBehaviour
     			} else {
     				defender = enemyUnit4;
     			}
+                defenderMove = enemyMove;
     		} else {
     			Debug.Log("Enemy moves first!");
     			//assign attacker to corresponding enemy
@@ -344,6 +347,7 @@ public class BattleSystem : MonoBehaviour
     			} else {
     				attacker = enemyUnit4;
     			}
+                attackerMove = enemyMove;
 
     			//assign defender to corresponding player
     			if(playerUnit1.unitName == playerMove.moveOwner) {
@@ -355,21 +359,26 @@ public class BattleSystem : MonoBehaviour
     			} else {
     				defender = playerUnit4;
     			}
+                defenderMove = playerMove;
     		}
     		//if attacker is dead, don't calc damage
     		if(attacker.currentHP <= 0) {
     			dialogueText.text = attacker + "is incapacitated.";
     		} else {
-    			//check to see if move has attribute advantage
+                //set move damage to base move power
+                moveDamage = attackerMove.power;
+
+    			//check to see if unit has attribute advantage
+                advantage = attackerMove.isEffective(defender.attribute);
 
 		    	//check to see if critical hit lands for attacker
 				critCheck = Random.Range(1,101);
 				if(critCheck > (100 - attacker.critRate)) {
-					critDamage = attacker.power * 1.5f; // f added to make it a float value
+					moveDamage += moveDamage * 1.5d; // convert to double
 				}
 
 				//actual damage calculation for attacker
-		   		int damage = (int)((attacker.power * advantage + critDamage) - defender.defense);
+		   		int damage = (int)((attacker.power * advantage + moveDamage) - defender.defense);
 
 		        //if damage is negative, set to 0 (no damage taken)
 		        if (damage < 0) {
@@ -404,18 +413,22 @@ public class BattleSystem : MonoBehaviour
 
     		//defender's turn, same rules as attacker
     		if(attacker.currentHP == 0) {
-                dialogueText.text = attacker.unitName + "is incapacitated.";
+                dialogueText.text = defender.unitName + "is incapacitated.";
     		} else {
-    			//check to see if move has attribute advantage
+    			//set move damage to base move power
+                moveDamage = defenderMove.power;
 
-		    	//check to see if critical hit lands for attacker
-				critCheck = Random.Range(1,101);
-				if(critCheck > (100 - defender.critRate)) {
-					critDamage = defender.power * 1.5f;
-				}
+                //check to see if unit has attribute advantage
+                advantage = defenderMove.isEffective(attacker.attribute);
 
-				//actual damage calculation for attacker
-		   		int damage = (int)((defender.power * advantage + critDamage) - attacker.defense);
+                //check to see if critical hit lands for defender
+                critCheck = Random.Range(1,101);
+                if(critCheck > (100 - defender.critRate)) {
+                    moveDamage += moveDamage * 1.5d; // convert to double
+                }
+
+                //actual damage calculation for defender
+                int damage = (int)((defender.power * advantage + moveDamage) - attacker.defense);
 
 		        //if damage is negative, set to 0 (no damage taken)
 		        if (damage < 0) {
@@ -423,7 +436,7 @@ public class BattleSystem : MonoBehaviour
 		        }
 
 		        //apply damage
-		        isDead = defender.TakeDamage(damage);
+		        isDead = attacker.TakeDamage(damage);
 		        if (damage == 0) {
 		        	Debug.Log("No damage taken!");
 		        }
