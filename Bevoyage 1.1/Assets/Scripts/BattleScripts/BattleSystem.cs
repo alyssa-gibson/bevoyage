@@ -223,6 +223,12 @@ public class BattleSystem : MonoBehaviour
     //for move select, do not allow dead character moves to be selected.
     IEnumerator PlayerAttack()
     {
+        //check to see if stack is empty - if yes, restock w shuffled array
+        if (partyDeck.Count == 0)
+        {
+            Debug.Log("Stack empty, reshuffling!");
+            buildPlayerDeck();
+        }
         //pop first 5 moves off stack into turn array
         for (int i = 0; i < partyTurn.Length; i++) {
             partyTurn[i] = (Move) partyDeck.Pop();
@@ -230,13 +236,7 @@ public class BattleSystem : MonoBehaviour
 
         // Display Moves
         AttackChoice.setMoveDisplay(partyTurn);
-
-        //check to see if stack is empty - if yes, restock w shuffled array
-        if (partyDeck.Count == 0)
-        {
-            Debug.Log("Stack empty, reshuffling!");
-            buildPlayerDeck();
-        }
+        
         //restock code here
         yield return new WaitForSeconds(2f); // Need a return bc it's ienumerator, may change 
     }
@@ -248,6 +248,13 @@ public class BattleSystem : MonoBehaviour
         currentWeight = 0;
         selectIndex = 0;
         yield return new WaitForSeconds(3f);
+
+        //check to see if stack is empty - if yes, restock w shuffled array
+        if (enemyDeck.Count == 0)
+        {
+            Debug.Log("Stack empty, reshuffling!");
+            buildEnemyDeck();
+        }
 
         //pop first 5 moves off stack into turn array
         for (int i = 0; i < enemyTurn.Length; i++){
@@ -261,13 +268,6 @@ public class BattleSystem : MonoBehaviour
                 enemySelectedMoves[selectIndex] = enemyTurn[i];
                 selectIndex++;
             }
-        }
-
-        //check to see if stack is empty - if yes, restock w shuffled array
-        if (partyDeck.Count == 0)
-        {
-            Debug.Log("Stack empty, reshuffling!");
-            buildEnemyDeck();
         }
 
         //selection finished, move to damage phase
@@ -289,9 +289,10 @@ public class BattleSystem : MonoBehaviour
 
     		Move playerMove = partySelectedMoves[i];
     		Move enemyMove = enemySelectedMoves[i];
-            Debug.Log(playerMove);
-            Debug.Log(enemyMove);
-    		Unit attacker, defender;
+            //Debug.Log(playerMove);
+            //Debug.Log(enemyMove);
+            Unit attacker = null;
+            Unit defender = null;
 
             if(playerMove == null && enemyMove == null){break;}
 
@@ -309,8 +310,7 @@ public class BattleSystem : MonoBehaviour
     				    attacker = playerUnit4;
     			    }
 
-                    if (enemyMove == null)
-                    {
+                    if (enemyMove == null){
                         int theChosen = Random.Range(0, 4);
                         while(enemyGraveyard[theChosen] != 0){
                             theChosen = Random.Range(0, 4);
@@ -339,6 +339,8 @@ public class BattleSystem : MonoBehaviour
                     }
                     if (enemyMove != null) { 
                         damageCalc(defender, attacker, enemyMove);
+                        Debug.Log("attacker: " + attacker.unitName +" HP: " + attacker.currentHP);
+                        battleStatusBar.SetHP(attacker.currentHP, attacker.unitName);
                         yield return new WaitForSeconds(3f);
                     }
                     //adjust HUDs
@@ -359,12 +361,9 @@ public class BattleSystem : MonoBehaviour
     				    attacker = enemyUnit4;
     			    }
 
-
-                    if (playerMove == null)
-                    {
+                    if (playerMove == null){
                         int theChosen = Random.Range(0, 4);
-                        while (enemyGraveyard[theChosen] != 0)
-                        {
+                        while (enemyGraveyard[theChosen] != 0){
                             theChosen = Random.Range(0, 4);
                         }
                         if (theChosen == 0) { defender = playerUnit1; }
@@ -387,6 +386,8 @@ public class BattleSystem : MonoBehaviour
                     //do damage
                     if(enemyMove != null) { 
                         damageCalc(attacker, defender, enemyMove);
+                        Debug.Log("defender: " + defender.unitName + " HP: " + defender.currentHP);
+                        battleStatusBar.SetHP(defender.currentHP, defender.unitName);
                         yield return new WaitForSeconds(3f);
                     }
                     if(playerMove != null) { 
@@ -396,7 +397,7 @@ public class BattleSystem : MonoBehaviour
                     //adjust HUDs
                     enemyHUD.SetHP(attacker.currentHP, attacker.unitName);
                     playerHUD.SetHP(defender.currentHP, defender.unitName);
-                    battleStatusBar.SetHP(defender.currentHP, defender.unitName);
+                    //battleStatusBar.SetHP(defender.currentHP, defender.unitName);
                 }
             }
     	}
@@ -447,6 +448,7 @@ public class BattleSystem : MonoBehaviour
     void PlayerTurn() {
         currentWeight = 0;
         selectIndex = 0;
+        AttackChoice.moveBarSet(0);
         StartCoroutine(PlayerAttack());
         dialogueText.text = "Choose an action:";
     }
@@ -511,53 +513,26 @@ public class BattleSystem : MonoBehaviour
 
             //apply damage
             isDead = defender.TakeDamage(damage);
+            Debug.Log("Name: "+defender.unitName + " HP: " + defender.currentHP);
             if (damage == 0) {
                 Debug.Log("No damage taken!");
+                return;
             }
-            // if(playerMove.weight < enemyMove.weight) {
-            //     enemyHUD.SetHP(defender.currentHP, defender.unitName);
-            // } else {
-            //     playerHUD.SetHP(defender.currentHP, defender.unitName);
-            // }
+
             dialogueText.text = attacker.unitName + " attacks " + defender.unitName + " for " + damage + "!";
             if(isDead) {
                 dialogueText.text = defender.unitName + " is defeated!";
                 if(defender.type == 'p') {
-                    //partyGraveyard++; // Make flag the correct person instead
-                    if(defender.unitName == playerUnit1.unitName)
-                    {
-                        partyGraveyard[0] = 1;
-                    }
-                    else if (defender.unitName == playerUnit2.unitName)
-                    {
-                        partyGraveyard[1] = 1;
-                    }
-                    else if (defender.unitName == playerUnit3.unitName)
-                    {
-                        partyGraveyard[2] = 1;
-                    }
-                    else
-                    {
-                        partyGraveyard[3] = 1;
-                    }
-                } else {
-                    //enemyGraveyard++; // Make flag the correct person instead
-                    if (defender.unitName == enemyUnit1.unitName)
-                    {
-                        enemyGraveyard[0] = 1;
-                    }
-                    else if (defender.unitName == enemyUnit2.unitName)
-                    {
-                        enemyGraveyard[1] = 1;
-                    }
-                    else if (defender.unitName == enemyUnit3.unitName)
-                    {
-                        enemyGraveyard[2] = 1;
-                    }
-                    else
-                    {
-                        enemyGraveyard[3] = 1;
-                    }
+                    if(defender.unitName == playerUnit1.unitName){partyGraveyard[0] = 1;}
+                    else if (defender.unitName == playerUnit2.unitName){partyGraveyard[1] = 1;}
+                    else if (defender.unitName == playerUnit3.unitName){ partyGraveyard[2] = 1;}
+                    else{partyGraveyard[3] = 1;}
+                } 
+                else {
+                    if (defender.unitName == enemyUnit1.unitName){enemyGraveyard[0] = 1;}
+                    else if (defender.unitName == enemyUnit2.unitName){enemyGraveyard[1] = 1;}
+                    else if (defender.unitName == enemyUnit3.unitName){enemyGraveyard[2] = 1;}
+                    else{enemyGraveyard[3] = 1;}
                 }
             }
         }
@@ -567,8 +542,7 @@ public class BattleSystem : MonoBehaviour
     {
         currentWeight = 0;
         //calculate current weight of chosen moves
-        for (int i=0; i<selectIndex; i++)
-        {
+        for (int i=0; i<selectIndex; i++){
             currentWeight = currentWeight + partySelectedMoves[i].weight;
         }
         // check which move it was and see if it will fit the weightcap 
@@ -597,7 +571,6 @@ public class BattleSystem : MonoBehaviour
         moveSlot5.interactable = true;
         AttackChoice.moveBarSet(0);
         currentWeight = 0;
-        Debug.Log("Reset Clicked");
         partySelectedMoves = new Move[5];
         selectIndex = 0;
     }

@@ -53,7 +53,6 @@ public class Unit : MonoBehaviour
 
     public bool TakeDamage(int dmg) //may change int to float
     {
-
         currentHP -= dmg;
 
         if (currentHP <= 0)
