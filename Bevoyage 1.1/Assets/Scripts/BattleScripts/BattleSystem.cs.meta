@@ -4,18 +4,31 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - playerPrefab1: {fileID: 2067945243378870618, guid: 2437aeb45b7c08742873eb980f197c6a, type: 3}
-  - playerPrefab2: {fileID: 7140578392119855467, guid: 617301eb2322c94449aa8d937be8c3ed, type: 3}
-  - playerPrefab3: {fileID: 3516040026932782834, guid: aba3847c0d5540e4e8238a6f68d10790, type: 3}
-  - playerPrefab4: {fileID: 2227237920100612649, guid: 9c3af3e8d7705c8429b0aa1dfbf452c3, type: 3}
-  - enemyPrefab: {fileID: 7046153434585823365, guid: da668e6ef79b18e4db5fae1cfffcc02a, type: 3}
+  - playerPrefab1: {instanceID: 0}
+  - playerPrefab2: {instanceID: 0}
+  - playerPrefab3: {instanceID: 0}
+  - playerPrefab4: {instanceID: 0}
+  - enemyPrefab1: {instanceID: 0}
+  - enemyPrefab2: {instanceID: 0}
+  - enemyPrefab3: {instanceID: 0}
+  - enemyPrefab4: {instanceID: 0}
   - playerStation1: {instanceID: 0}
   - playerStation2: {instanceID: 0}
   - playerStation3: {instanceID: 0}
   - playerStation4: {instanceID: 0}
-  - enemyStation: {instanceID: 0}
+  - enemyStation1: {instanceID: 0}
+  - enemyStation2: {instanceID: 0}
+  - enemyStation3: {instanceID: 0}
+  - enemyStation4: {instanceID: 0}
+  - moveSlot1: {instanceID: 0}
+  - moveSlot2: {instanceID: 0}
+  - moveSlot3: {instanceID: 0}
+  - moveSlot4: {instanceID: 0}
+  - moveSlot5: {instanceID: 0}
   - BattleUI: {instanceID: 0}
   - AttackUI: {instanceID: 0}
+  - AttackChoice: {instanceID: 0}
+  - battleStatusBar: {instanceID: 0}
   - playerHUD: {instanceID: 0}
   - enemyHUD: {instanceID: 0}
   - dialogueText: {instanceID: 0}
