@@ -41,6 +41,15 @@ public class BattleSystem : MonoBehaviour
     Unit enemyUnit3;
     Unit enemyUnit4;
 
+    GameObject playerGO1;
+    GameObject playerGO2;
+    GameObject playerGO3;
+    GameObject playerGO4;
+    GameObject enemyGO1;
+    GameObject enemyGO2;
+    GameObject enemyGO3;
+    GameObject enemyGO4;
+
     public Button moveSlot1;
     public Button moveSlot2;
     public Button moveSlot3;
@@ -117,22 +126,22 @@ public class BattleSystem : MonoBehaviour
         AttackUI.SetActive(false);
 
         //Spawn players and enemies
-    	GameObject playerGO1 = Instantiate(playerPrefab1, playerStation1);
+    	playerGO1 = Instantiate(playerPrefab1, playerStation1);
     	playerUnit1 = playerGO1.GetComponent<Unit>();
-        GameObject playerGO2 = Instantiate(playerPrefab2, playerStation2);
+        playerGO2 = Instantiate(playerPrefab2, playerStation2);
         playerUnit2 = playerGO2.GetComponent<Unit>();
-        GameObject playerGO3 = Instantiate(playerPrefab3, playerStation3);
+        playerGO3 = Instantiate(playerPrefab3, playerStation3);
         playerUnit3 = playerGO3.GetComponent<Unit>();
-        GameObject playerGO4 = Instantiate(playerPrefab4, playerStation4);
+        playerGO4 = Instantiate(playerPrefab4, playerStation4);
         playerUnit4 = playerGO4.GetComponent<Unit>();
 
-    	GameObject enemyGO1 = Instantiate(enemyPrefab1, enemyStation1);
+    	enemyGO1 = Instantiate(enemyPrefab1, enemyStation1);
     	enemyUnit1 = enemyGO1.GetComponent<Unit>();
-        GameObject enemyGO2 = Instantiate(enemyPrefab2, enemyStation2);
+        enemyGO2 = Instantiate(enemyPrefab2, enemyStation2);
         enemyUnit2 = enemyGO2.GetComponent<Unit>();
-        GameObject enemyGO3 = Instantiate(enemyPrefab3, enemyStation3);
+        enemyGO3 = Instantiate(enemyPrefab3, enemyStation3);
         enemyUnit3 = enemyGO3.GetComponent<Unit>();
-        GameObject enemyGO4 = Instantiate(enemyPrefab4, enemyStation4);
+        enemyGO4 = Instantiate(enemyPrefab4, enemyStation4);
         enemyUnit4 = enemyGO4.GetComponent<Unit>();
 
         weightCap = playerUnit1.weightCap + playerUnit2.weightCap + playerUnit3.weightCap + playerUnit4.weightCap;
@@ -515,16 +524,33 @@ public class BattleSystem : MonoBehaviour
                 dialogueText.text = defender.unitName + " is defeated!";
                 yield return new WaitForSeconds(3f);
                 if (defender.type == 'p') {
-                    if(defender.unitName == playerUnit1.unitName){partyGraveyard[0] = 1;}
-                    else if (defender.unitName == playerUnit2.unitName){partyGraveyard[1] = 1;}
-                    else if (defender.unitName == playerUnit3.unitName){ partyGraveyard[2] = 1;}
-                    else{partyGraveyard[3] = 1;}
+                    if(defender.unitName == playerUnit1.unitName){
+                        partyGraveyard[0] = 1;
+                        playerGO1.SetActive(false);
+                    }
+                    else if (defender.unitName == playerUnit2.unitName){
+                        playerGO2.SetActive(false);
+                        partyGraveyard[1] = 1;}
+                    else if (defender.unitName == playerUnit3.unitName){
+                        playerGO3.SetActive(false);
+                        partyGraveyard[2] = 1;}
+                    else{
+                        playerGO4.SetActive(false);
+                        partyGraveyard[3] = 1;}
                 } 
                 else {
-                    if (defender.unitName == enemyUnit1.unitName){enemyGraveyard[0] = 1;}
-                    else if (defender.unitName == enemyUnit2.unitName){enemyGraveyard[1] = 1;}
-                    else if (defender.unitName == enemyUnit3.unitName){enemyGraveyard[2] = 1;}
-                    else{enemyGraveyard[3] = 1;}
+                    if (defender.unitName == enemyUnit1.unitName){
+                        enemyGO1.SetActive(false);
+                        enemyGraveyard[0] = 1;}
+                    else if (defender.unitName == enemyUnit2.unitName){
+                        enemyGO2.SetActive(false);
+                        enemyGraveyard[1] = 1;}
+                    else if (defender.unitName == enemyUnit3.unitName){
+                        enemyGO3.SetActive(false);
+                        enemyGraveyard[2] = 1;}
+                    else{
+                        enemyGO4.SetActive(false);
+                        enemyGraveyard[3] = 1;}
                 }
             }
         }
