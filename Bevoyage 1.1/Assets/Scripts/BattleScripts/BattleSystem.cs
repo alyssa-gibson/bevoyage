@@ -171,31 +171,25 @@ public class BattleSystem : MonoBehaviour
     public void buildPlayerDeck(){
         partyCounter = 0;
         
-        foreach (Move mov in playerUnit1.moveDeck)
-        {
+        foreach (Move mov in playerUnit1.moveDeck){
             partyFullDeck[partyCounter] = mov;
             partyCounter++;
         }
-        foreach (Move mov in playerUnit2.moveDeck)
-        {
+        foreach (Move mov in playerUnit2.moveDeck){
             partyFullDeck[partyCounter] = mov;
             partyCounter++;
         }
-        foreach (Move mov in playerUnit3.moveDeck)
-        {
+        foreach (Move mov in playerUnit3.moveDeck){
             partyFullDeck[partyCounter] = mov;
             partyCounter++;
         }
-        foreach (Move mov in playerUnit4.moveDeck)
-        {
+        foreach (Move mov in playerUnit4.moveDeck){
             partyFullDeck[partyCounter] = mov;
             partyCounter++;
         }
-
+        // shuffle then put into stack
         partyFullDeck = shuffle(partyFullDeck);
-
-        foreach (Move mov in partyFullDeck)
-        {
+        foreach (Move mov in partyFullDeck){
             partyDeck.Push(mov);
         }
     }
@@ -204,31 +198,25 @@ public class BattleSystem : MonoBehaviour
     {
         enemyCounter = 0;
         
-        foreach (Move mov in enemyUnit1.moveDeck)
-        {
+        foreach (Move mov in enemyUnit1.moveDeck){
             enemyFullDeck[enemyCounter] = mov;
             enemyCounter++;
         }
-        foreach (Move mov in enemyUnit2.moveDeck)
-        {
+        foreach (Move mov in enemyUnit2.moveDeck){
             enemyFullDeck[enemyCounter] = mov;
             enemyCounter++;
         }
-        foreach (Move mov in enemyUnit3.moveDeck)
-        {
+        foreach (Move mov in enemyUnit3.moveDeck){
             enemyFullDeck[enemyCounter] = mov;
             enemyCounter++;
         }
-        foreach (Move mov in enemyUnit4.moveDeck)
-        {
+        foreach (Move mov in enemyUnit4.moveDeck){
             enemyFullDeck[enemyCounter] = mov;
             enemyCounter++;
         }
-
+        // shuffle then put into stack
         enemyFullDeck = shuffle(enemyFullDeck);
-
-        foreach (Move mov in enemyFullDeck)
-        {
+        foreach (Move mov in enemyFullDeck){
             enemyDeck.Push(mov);
         }
     }
@@ -288,24 +276,19 @@ public class BattleSystem : MonoBehaviour
         Debug.Log("Enemy move selection finished");
     	state = BattleState.DAMAGE;
     	StartCoroutine(execOrder());
-
     }
 
     IEnumerator execOrder() {
     	Debug.Log("Made it to damage phase");
-
-        //compare lists, execute damage calculation in order, use unit functions
-
         /* TO DO:
     	 * we need a medic
     	 */
+        //compare lists, execute damage calculation in order, use unit functions
         for (int i = 0; i < 5; i++) {
 
     		Move playerMove = partySelectedMoves[i];
     		Move enemyMove = enemySelectedMoves[i];
-            //Debug.Log(playerMove);
-            //Debug.Log(enemyMove);
-            Unit attacker = null; //ref int refLocal = ref data.MyField;
+            Unit attacker = null; 
             Unit defender = null;
 
             if(playerMove == null && enemyMove == null){break;}
@@ -411,7 +394,6 @@ public class BattleSystem : MonoBehaviour
                     //adjust HUDs
                     enemyHUD.SetHP(attacker.currentHP, attacker.unitName);
                     playerHUD.SetHP(defender.currentHP, defender.unitName);
-                    //battleStatusBar.SetHP(defender.currentHP, defender.unitName);
                 }
             }
     	}
@@ -428,10 +410,8 @@ public class BattleSystem : MonoBehaviour
 		}
 
         bool enemyDeathFlag = true;
-        for (int i = 0; i < enemyGraveyard.Length; i++)
-        {
-            if (enemyGraveyard[i] == 0)
-            {
+        for (int i = 0; i < enemyGraveyard.Length; i++){
+            if (enemyGraveyard[i] == 0){
                 enemyDeathFlag = false;
             }
         }
@@ -448,11 +428,9 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator EndBattle()
     {
-        if(state == BattleState.WON)
-        {
+        if(state == BattleState.WON){
             dialogueText.text = "You won the battle!";
-        } else if (state == BattleState.LOST)
-        {
+        } else if (state == BattleState.LOST){
             dialogueText.text = "You were defeated.";
         }
         yield return new WaitForSeconds(3f);
@@ -484,10 +462,7 @@ public class BattleSystem : MonoBehaviour
 
     public void CalculateWeight(Move chosenMove, float currentWeight, Button button)
     {
-        if (currentWeight + chosenMove.weight > weightCap)
-        {
-            Debug.Log("Cannot Select!");
-        }
+        if (currentWeight + chosenMove.weight > weightCap){Debug.Log("Cannot Select!");}
         else {
             partySelectedMoves[selectIndex] = chosenMove;
             AttackChoice.moveBarSet(currentWeight + chosenMove.weight);
@@ -555,8 +530,7 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void AttackSelect(Button button)
-    {
+    public void AttackSelect(Button button){
         currentWeight = 0;
         //calculate current weight of chosen moves
         for (int i=0; i<selectIndex; i++){
