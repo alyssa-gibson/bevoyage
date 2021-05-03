@@ -424,7 +424,7 @@ public class BattleSystem : MonoBehaviour
         }
         if(partyDeathFlag == true) {
 			state = BattleState.LOST;
-        	EndBattle();
+            StartCoroutine(EndBattle());
 		}
 
         bool enemyDeathFlag = true;
@@ -437,7 +437,7 @@ public class BattleSystem : MonoBehaviour
         }
         if (enemyDeathFlag == true) {
 			state = BattleState.WON;
-        	EndBattle();
+            StartCoroutine(EndBattle());
 		}
 
         yield return new WaitForSeconds(3f);
@@ -446,7 +446,7 @@ public class BattleSystem : MonoBehaviour
 		PlayerTurn();
     }
 
-    void EndBattle()
+    IEnumerator EndBattle()
     {
         if(state == BattleState.WON)
         {
@@ -455,6 +455,8 @@ public class BattleSystem : MonoBehaviour
         {
             dialogueText.text = "You were defeated.";
         }
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("OverworldMap");
     }
 
     //Method to represent player move selection.
