@@ -291,7 +291,7 @@ public class BattleSystem : MonoBehaviour
     		Move enemyMove = enemySelectedMoves[i];
             //Debug.Log(playerMove);
             //Debug.Log(enemyMove);
-            Unit attacker = null;
+            Unit attacker = null; //ref int refLocal = ref data.MyField;
             Unit defender = null;
 
             if(playerMove == null && enemyMove == null){break;}
@@ -301,8 +301,8 @@ public class BattleSystem : MonoBehaviour
                 //assign attacker to corresponding player
                 if(playerMove != null) {
                     if (playerUnit1.unitName == playerMove.moveOwner) {
-    				    attacker = playerUnit1;
-    			    } else if(playerUnit2.unitName == playerMove.moveOwner) {
+    				    attacker = playerUnit1; //int *ptr = & x;
+                    } else if(playerUnit2.unitName == playerMove.moveOwner) {
     				    attacker = playerUnit2;
     			    } else if(playerUnit3.unitName == playerMove.moveOwner) {
     				    attacker = playerUnit3;

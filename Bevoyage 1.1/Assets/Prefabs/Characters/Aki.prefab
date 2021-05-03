@@ -103,8 +103,8 @@ MonoBehaviour:
   power: 80
   critRate: 25
   defense: 75
-  maxHP: 500
-  currentHP: 500
+  maxHP: 80
+  currentHP: 80
   image: {fileID: 21300000, guid: c96514cece7ae644b82100e5edf7d757, type: 3}
   moveDeck:
   - {fileID: 1774599700485225392, guid: dcba7d9cee8826f4fa2b828760ae7f4d, type: 3}
