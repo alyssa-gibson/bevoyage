@@ -22,7 +22,7 @@ public class Move : MonoBehaviour
 
     //Method that checks attribute effectiveness. Returns a double for damage modifier.
     public double isEffective(string unitAttribute) {
-    	double modifier = 1;
+    	double modifier = 0;
     	switch(attribute) {
     		case "sweet":
     			if (unitAttribute == "spiced") {
@@ -69,6 +69,9 @@ public class Move : MonoBehaviour
     				modifier = 1.5;
     			}
     			break;
+            default:
+                modifier = 1.0;
+                break;
     	}
     	return modifier;
     }

@@ -299,7 +299,7 @@ public class BattleSystem : MonoBehaviour
             if (enemyMove == null || playerMove.weight < enemyMove.weight) {
     			Debug.Log("Player moves first!");
                 //assign attacker to corresponding player
-                if(playerMove != null) { 
+                if(playerMove != null) {
                     if (playerUnit1.unitName == playerMove.moveOwner) {
     				    attacker = playerUnit1;
     			    } else if(playerUnit2.unitName == playerMove.moveOwner) {
