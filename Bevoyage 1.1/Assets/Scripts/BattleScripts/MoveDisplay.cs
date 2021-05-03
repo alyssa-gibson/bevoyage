@@ -27,12 +27,11 @@ public class MoveDisplay : MonoBehaviour
 
     public void setMoveDisplay(Move[] moveArray)
     {
-        Debug.Log("In set move display");
         moveName1.text = moveArray[0].moveName;
         moveName2.text = moveArray[1].moveName;
         moveName3.text = moveArray[2].moveName;
         moveName4.text = moveArray[3].moveName;
-        moveName5.text = moveArray[3].moveName;
+        moveName5.text = moveArray[4].moveName;
 
         Attribute1.text = moveArray[0].attribute;
         Attribute2.text = moveArray[1].attribute;

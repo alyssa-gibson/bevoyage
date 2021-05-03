@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Aki
-  type: 0
+  type: 112
   attribute: Neutral
   unitLevel: 1
   weightCap: 2

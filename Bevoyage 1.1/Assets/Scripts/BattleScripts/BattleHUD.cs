@@ -59,15 +59,17 @@ public class BattleHUD : MonoBehaviour
     }
 
     public void SetHP(float hp, string name){
-        if(name == charName1.ToString())
+        Debug.Log("In SetHP");
+        Debug.Log("Set "+ name + "'s HP to "+ hp);
+        if (name == charName1.GetComponent<Text>().text.ToString())
         {
             char1Slider.value = hp;
         }
-        else if (name == charName2.ToString())
+        else if (name == charName2.GetComponent<Text>().text.ToString())
         {
             char2Slider.value = hp;
         }
-        else if (name == charName3.ToString())
+        else if (name == charName3.GetComponent<Text>().text.ToString())
         {
             char3Slider.value = hp;
         }

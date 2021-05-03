@@ -95,8 +95,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86464ad6b2bee412aac8b87d21751278, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: Slime
-  type: 0
+  unitName: SpicedSlime
+  type: 101
   attribute: Spiced
   unitLevel: 2
   weightCap: 1

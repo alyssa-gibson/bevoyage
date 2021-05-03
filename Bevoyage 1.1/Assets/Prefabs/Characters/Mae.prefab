@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Mae
-  type: 0
+  type: 112
   attribute: Spiced
   unitLevel: 1
   weightCap: 1

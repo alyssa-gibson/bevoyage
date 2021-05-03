@@ -157,66 +157,80 @@ public class BattleSystem : MonoBehaviour
         PlayerTurn();
     }
 
-    public void buildPlayerDeck()
-    {
+    public Move[] shuffle(Move[] inputArray){
+        for (int i = inputArray.Length - 1; i > 0; i--){
+            int randomIndex = Random.Range(0, i + 1); //random.Next(0, i + 1)
+
+            Move temp = inputArray[i];
+            inputArray[i] = inputArray[randomIndex];
+            inputArray[randomIndex] = temp;
+        }
+        return inputArray;
+    }
+
+    public void buildPlayerDeck(){
         partyCounter = 0;
+        
         foreach (Move mov in playerUnit1.moveDeck)
         {
             partyFullDeck[partyCounter] = mov;
             partyCounter++;
-            partyDeck.Push(mov);
         }
         foreach (Move mov in playerUnit2.moveDeck)
         {
             partyFullDeck[partyCounter] = mov;
             partyCounter++;
-            partyDeck.Push(mov);
         }
         foreach (Move mov in playerUnit3.moveDeck)
         {
             partyFullDeck[partyCounter] = mov;
             partyCounter++;
-            partyDeck.Push(mov);
         }
         foreach (Move mov in playerUnit4.moveDeck)
         {
             partyFullDeck[partyCounter] = mov;
             partyCounter++;
+        }
+
+        partyFullDeck = shuffle(partyFullDeck);
+
+        foreach (Move mov in partyFullDeck)
+        {
             partyDeck.Push(mov);
         }
-        //shuffle stacks
-        //partyDeck = partyDeck.OrderBy(x => rnd.Next());
     }
 
     public void buildEnemyDeck()
     {
         enemyCounter = 0;
+        
         foreach (Move mov in enemyUnit1.moveDeck)
         {
             enemyFullDeck[enemyCounter] = mov;
             enemyCounter++;
-            enemyDeck.Push(mov);
         }
         foreach (Move mov in enemyUnit2.moveDeck)
         {
             enemyFullDeck[enemyCounter] = mov;
             enemyCounter++;
-            enemyDeck.Push(mov);
         }
         foreach (Move mov in enemyUnit3.moveDeck)
         {
             enemyFullDeck[enemyCounter] = mov;
             enemyCounter++;
-            enemyDeck.Push(mov);
         }
         foreach (Move mov in enemyUnit4.moveDeck)
         {
             enemyFullDeck[enemyCounter] = mov;
             enemyCounter++;
+        }
+
+        enemyFullDeck = shuffle(enemyFullDeck);
+
+        foreach (Move mov in enemyFullDeck)
+        {
             enemyDeck.Push(mov);
         }
-        //shuffle stacks
-        //enemyDeck = enemyDeck.OrderBy(x => rnd.Next());
     }
 
     //move inside code to damageCalc(), this method is just to select moves.
@@ -333,12 +347,12 @@ public class BattleSystem : MonoBehaviour
     			        }
                     }
                     //do damage
-                    if(playerMove != null) { 
-                        damageCalc(attacker, defender, playerMove);
+                    if(playerMove != null) {
+                        StartCoroutine(damageCalc(attacker, defender, playerMove));
                         yield return new WaitForSeconds(3f);
                     }
-                    if (enemyMove != null) { 
-                        damageCalc(defender, attacker, enemyMove);
+                    if (enemyMove != null) {
+                        StartCoroutine(damageCalc(defender, attacker, enemyMove));
                         Debug.Log("attacker: " + attacker.unitName +" HP: " + attacker.currentHP);
                         battleStatusBar.SetHP(attacker.currentHP, attacker.unitName);
                         yield return new WaitForSeconds(3f);
@@ -384,14 +398,14 @@ public class BattleSystem : MonoBehaviour
     			        }
                     }
                     //do damage
-                    if(enemyMove != null) { 
-                        damageCalc(attacker, defender, enemyMove);
+                    if(enemyMove != null) {
+                        StartCoroutine(damageCalc(attacker, defender, enemyMove));
                         Debug.Log("defender: " + defender.unitName + " HP: " + defender.currentHP);
                         battleStatusBar.SetHP(defender.currentHP, defender.unitName);
                         yield return new WaitForSeconds(3f);
                     }
-                    if(playerMove != null) { 
-                        damageCalc(defender, attacker, playerMove);
+                    if(playerMove != null) {
+                        StartCoroutine(damageCalc(defender, attacker, playerMove));
                         yield return new WaitForSeconds(3f);
                     }
                     //adjust HUDs
@@ -430,7 +444,6 @@ public class BattleSystem : MonoBehaviour
         //if both parties aren't dead, continue back to player turn
         state = BattleState.PLAYERTURN;
 		PlayerTurn();
-        
     }
 
     void EndBattle()
@@ -481,7 +494,7 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    public void damageCalc(Unit attacker, Unit defender, Move attackerMove) {
+        IEnumerator damageCalc(Unit attacker, Unit defender, Move attackerMove) {
         double advantage = 1.0;
         double moveDamage = 0;
         float critCheck;
@@ -489,7 +502,8 @@ public class BattleSystem : MonoBehaviour
         int damage;
         //if attacker is dead, don't calc damage
         if (attacker.currentHP <= 0) {
-            dialogueText.text = attacker + " is incapacitated.";
+            dialogueText.text = attacker.unitName + " is incapacitated.";
+            yield return new WaitForSeconds(3f);
         } else {
             //set move damage to base move power
             moveDamage = attackerMove.power;
@@ -516,13 +530,14 @@ public class BattleSystem : MonoBehaviour
             Debug.Log("Name: "+defender.unitName + " HP: " + defender.currentHP);
             if (damage == 0) {
                 Debug.Log("No damage taken!");
-                return;
             }
 
             dialogueText.text = attacker.unitName + " attacks " + defender.unitName + " for " + damage + "!";
-            if(isDead) {
+            //yield return new WaitForSeconds();
+            if (isDead) {
                 dialogueText.text = defender.unitName + " is defeated!";
-                if(defender.type == 'p') {
+                yield return new WaitForSeconds(3f);
+                if (defender.type == 'p') {
                     if(defender.unitName == playerUnit1.unitName){partyGraveyard[0] = 1;}
                     else if (defender.unitName == playerUnit2.unitName){partyGraveyard[1] = 1;}
                     else if (defender.unitName == playerUnit3.unitName){ partyGraveyard[2] = 1;}
